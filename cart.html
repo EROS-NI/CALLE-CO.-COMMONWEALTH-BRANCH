@@ -33,8 +33,7 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
 			  <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-	          <li class="nav-item"><a href="menu.html" class="nav-link">Menu</a></li>
-			  <li class="nav-item"><a href="shop.html" class="nav-link">Order Online</a></li>
+			  <li class="nav-item"><a href="shop.html" class="nav-link">Menu</a></li>
 	          <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="room.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Content</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
@@ -97,7 +96,7 @@
     					</p>
     					<p class="d-flex">
     						<span>Delivery</span>
-    						<span>₱0.00</span>
+    						<span>₱40.00</span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
@@ -105,7 +104,9 @@
     						<span id="total">₱0.00</span>
     					</p>
     				</div>
-    				<p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+    				<p class="text-center">
+  <a href="checkout.html" id="checkout-btn" class="btn btn-primary py-3 px-4">Proceed to Checkout</a>
+</p>
     			</div>
     		</div>
 		</div>
@@ -387,6 +388,31 @@ button.qty-btn:hover {
 }
 </style>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const checkoutBtn = document.getElementById("checkout-btn");
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  function updateCheckoutButton() {
+    if (cart.length === 0) {
+      checkoutBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        alert("There's no order on your cart");
+      });
+    } else {
+      // Remove previous click handler if cart has items
+      checkoutBtn.addEventListener("click", function() {
+        // normal navigation to checkout page
+      });
+    }
+  }
+
+  updateCheckoutButton();
+
+  // Re-run whenever cart changes (optional)
+  // If you already have renderCart() after qty changes or remove, call updateCheckoutButton() there too
+});
+</script>
 
 
   </body>

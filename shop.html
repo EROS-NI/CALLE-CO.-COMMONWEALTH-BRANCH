@@ -23,6 +23,16 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+      /* small style tweak so the search + dropdown align nicely on mobile */
+      .search-filter-row { margin-top: 20px; margin-bottom: 20px; }
+      @media (max-width: 575.98px) {
+        .search-filter-row .col-md-4, .search-filter-row .col-md-8 {
+          padding-left: 0; padding-right: 0;
+        }
+      }
+    </style>
   </head>
   <body>
     
@@ -40,8 +50,7 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
             <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="menu.html" class="nav-link">Menu</a></li>
-            <li class="nav-item"><a href="shop.html" class="nav-link">Order Online</a></li>
+            <li class="nav-item"><a href="shop.html" class="nav-link">Menu</a></li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown">Content</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
@@ -65,1758 +74,1395 @@
         <div class="container">
           <div class="row slider-text justify-content-center align-items-center">
             <div class="col-md-7 col-sm-12 text-center ftco-animate">
-            	<h1 class="mb-3 mt-5 bread">Order Online</h1>
-	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Order Online</span></p>
+            	<h1 class="mb-3 mt-5 bread">Menu</h1>
+	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Menu</span></p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <style>
-  /* White text for the dropdown when closed */
-  .menu-entry .size-select {
-    color: #fff;           /* white text when closed */
-    background-color: #343a40; /* optional: dark background to match white text */
-  }
+<div class="container search-filter-row mb-3">
+  <div class="row align-items-center">
+    <!-- Category dropdown on the LEFT -->
+    <div class="col-md-3 mb-2">
+      <select id="categoryFilter" class="form-control">
+        <option value="all">All Categories</option>
+        <option value="v-pills-0">Milk Tea</option>
+        <option value="v-pills-1">Premium Frappe</option>
+        <option value="v-pills-2">Americano</option>
+        <option value="v-pills-3">Fruitea</option>
+        <option value="v-pills-4">Tropical Twist (Slushie)</option>
+        <option value="v-pills-5">Tropical Twist (Fruity Frappe)</option>
+        <option value="v-pills-6">Coffee Latte</option>
+        <option value="v-pills-7">Waffles</option>
+        <option value="v-pills-8">Add Ons</option>
+      </select>
+    </div>
 
-  /* Black text for the dropdown options when opened */
-  .menu-entry .size-select option {
-    color: #000;           /* black text inside options */
-    background-color: #fff; /* white background for options */
-  }
-</style>
+    <!-- Search bar on the RIGHT -->
+    <div class="col-md-3 mb-2">
+      <input type="text" id="searchBar" class="form-control" placeholder="Search items...">
+    </div>
+  </div>
+</div>
+
+<div id="search-results" style="display:none;">
+  <h2 class="category-title">Search Results</h2>
+
+  <div class="container-mt-5" style="padding-left:50px; padding-right:50px;">
+    <div class="row" id="search-results-row"></div>
+  </div>
+</div>
 
 
-   <section class="ftco-menu mb-5 pb-5">
-  <div class="container">
-    <div class="row d-md-flex">
-      <div class="col-lg-12 ftco-animate p-md-5">
-        <div class="row">
-
-          <!-- Dropdown Category Selector -->
-          <div class="col-md-12 mb-4 text-center">
-            <div class="dropdown">
-              <button
-                class="btn btn-primary dropdown-toggle"
-                type="button"
-                id="menuCategoryDropdown"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Select Category
-              </button>
-              <div class="dropdown-menu" aria-labelledby="menuCategoryDropdown">
-                <a class="dropdown-item active" data-target="v-pills-0">MilkTea</a>
-                <a class="dropdown-item" data-target="v-pills-1">Premium Frappe</a>
-                <a class="dropdown-item" data-target="v-pills-2">Amerikano</a>
-                <a class="dropdown-item" data-target="v-pills-3">FruiTea</a>
-                <a class="dropdown-item" data-target="v-pills-4">Tropical Twist (Slushie)</a>
-                <a class="dropdown-item" data-target="v-pills-5">Tropical Twist (Fruity Frappe)</a>
-                <a class="dropdown-item" data-target="v-pills-6">Coffee Latte</a>
-                <a class="dropdown-item" data-target="v-pills-7">Waffles</a>
-                <a class="dropdown-item" data-target="v-pills-8">Add-ons</a>
-              </div>
-            </div>
-          </div>
-
-      <!-- 🌀 Default GIF shown before selecting a category -->
-          <div id="default-category-gif"
-               class="d-flex flex-column align-items-center justify-content-center text-center"
-               style="min-height: 70vh; width: 100%;">
-            <img src="images/Boba.gif"
-                 alt="Select a Category"
-                 style="max-width: 600px; width: 100%; border-radius: 10px; display: block; margin: 0 auto;">
-            <p class="mt-3 fw-bold fs-5">Please select a category to view our menu</p>
-          </div>
-
-          <!-- Tab Content -->
-          <div class="col-md-12 tab-content" id="v-pills-tabContent">
             
             <!-- MilkTea -->
           <div class="menu-category" id="v-pills-0">
-  <div class="row">
-    <!-- Chocolate -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/m1.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Chocolate</h3>
+              <h2 class="category-title">Milk Tea</h2>
+  <div class="container-mt-5" style="padding-left: 50px; padding-right: 50px;">
+    <div class="row">
 
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
+  <!-- Chocolate -->
+      <div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Chocolate"
+       data-sizes="16oz,24oz"
+       data-description="Milky tea with chocolate flavor"
+       data-img="images/m1.png">
+    <div class="menu-row">
+      <img src="images/m1.png" alt="Chocolate">
+      <div class="menu-info">
+        <h3>Chocolate</h3>
+        <p>Milky tea with chocolate flavor</p>
+        <br>
+        <br>
+        <img src="images/logo.png" alt="Logo" 
+     style="width:50px; height:50; position:relative; bottom:10px; right:-230px;">
 
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button 
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="1"
-              data-name="Chocolate"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/m1.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cookies & Cream -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/m2.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Cookies & Cream</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button 
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="2"
-              data-name="Cookies & Cream"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/m2.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brown Sugar -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/m3.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Brown Sugar</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button 
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="3"
-              data-name="Brown Sugar"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/m3.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Taro -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/m4.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Taro</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button 
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="4"
-              data-name="Taro"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/m4.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Okinawa -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/m5.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Okinawa</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button 
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="5"
-              data-name="Okinawa"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/m5.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Wintermelon -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/m6.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Wintermelon</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button 
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="6"
-              data-name="Wintermelon"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/m6.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hokkaido -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/m7.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Hokkaido</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button 
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="7"
-              data-name="Hokkaido"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/m7.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Cookies & Cream -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Cookies & Cream"
+       data-sizes="16oz,24oz"
+       data-description="Creamy tea with cookie bits"
+       data-img="images/m2.png">
+    <div class="menu-row">
+      <img src="images/m2.png" alt="Cookies & Cream">
+      <div class="menu-info">
+        <h3>Cookies & Cream</h3>
+        <p>Creamy tea with cookie bits</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Brown Sugar -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Brown Sugar"
+       data-sizes="16oz,24oz"
+       data-description="Sweet milk tea with caramelized sugar"
+       data-img="images/m3.png">
+    <div class="menu-row">
+      <img src="images/m3.png" alt="Brown Sugar">
+      <div class="menu-info">
+        <h3>Brown Sugar</h3>
+        <p>Sweet milk tea with caramelized sugar</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Taro -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Taro"
+       data-sizes="16oz,24oz"
+       data-description="Creamy tea with nutty taro taste"
+       data-img="images/m4.png">
+    <div class="menu-row">
+      <img src="images/m4.png" alt="Taro">
+      <div class="menu-info">
+        <h3>Taro</h3>
+        <p>Creamy tea with nutty taro taste</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Okinawa -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Okinawa"
+       data-sizes="16oz,24oz"
+       data-description="Milk tea with deep brown sugar flavor"
+       data-img="images/m5.png">
+    <div class="menu-row">
+      <img src="images/m5.png" alt="Okinawa">
+      <div class="menu-info">
+        <h3>Okinawa</h3>
+        <p>Milk tea with deep brown sugar flavor</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Wintermelon -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Wintermelon"
+       data-sizes="16oz,24oz"
+       data-description="Light and refreshing sweet tea"
+       data-img="images/m6.png">
+    <div class="menu-row">
+      <img src="images/m6.png" alt="Wintermelon">
+      <div class="menu-info">
+        <h3>Wintermelon</h3>
+        <p>Light and refreshing sweet tea</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hokkaido -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Hokkaido"
+       data-sizes="16oz,24oz"
+       data-description="Creamy milk tea with caramel notes"
+       data-img="images/m7.png">
+    <div class="menu-row">
+      <img src="images/m7.png" alt="Hokkaido">
+      <div class="menu-info">
+        <h3>Hokkaido</h3>
+        <p>Creamy milk tea with caramel notes</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
             <!-- Premium Frappe -->
-            <div class="menu-category" id="v-pills-1">
-  <div class="row">
-    <!-- Cookies & Cream -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/dish-1.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Cookies & Cream</h3>
+<div class="menu-category" id="v-pills-1">
+  <h2 class="category-title">Premium Frappe</h2>
+  <div class="container-mt-5" style="padding-left: 50px; padding-right: 50px;">
+    <div class="row">
 
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="69" data-size="16oz" selected>16oz</option>
-              <option value="79" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱69</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="8"
-              data-name="Cookies & Cream"
-              data-price="69"
-              data-size="16oz"
-              data-img="images/dish-1.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Matcha -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/dish-2.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Matcha</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="69" data-size="16oz" selected>16oz</option>
-              <option value="79" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱69</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="9"
-              data-name="Matcha"
-              data-price="69"
-              data-size="16oz"
-              data-img="images/dish-2.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Java Chip -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/dish-3.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Java Chip</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="69" data-size="16oz" selected>16oz</option>
-              <option value="79" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱69</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="10"
-              data-name="Java Chip"
-              data-price="69"
-              data-size="16oz"
-              data-img="images/dish-3.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strawberry -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/dish-4.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Strawberry</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="69" data-size="16oz" selected>16oz</option>
-              <option value="79" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱69</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="11"
-              data-name="Strawberry"
-              data-price="69"
-              data-size="16oz"
-              data-img="images/dish-4.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cheesecake -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/dish-5.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Cheesecake</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="69" data-size="16oz" selected>16oz</option>
-              <option value="79" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱69</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="12"
-              data-name="Cheesecake"
-              data-price="69"
-              data-size="16oz"
-              data-img="images/dish-5.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Chocolate -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/dish-6.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Chocolate</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="69" data-size="16oz" selected>16oz</option>
-              <option value="79" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱69</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="13"
-              data-name="Chocolate"
-              data-price="69"
-              data-size="16oz"
-              data-img="images/dish-6.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Red Velvet -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/dish-7.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Red Velvet</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="69" data-size="16oz" selected>16oz</option>
-              <option value="79" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱69</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="14"
-              data-name="Red Velvet"
-              data-price="69"
-              data-size="16oz"
-              data-img="images/dish-7.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
+      <!-- Cookies & Cream -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Cookies & Cream"
+       data-sizes="16oz,22oz"
+       data-description="Cookies & Cream flavored dessert."
+       data-img="images/dish1.jpg">
+    <div class="menu-row">
+      <img src="images/dish1.jpg" alt="Cookies & Cream">
+      <div class="menu-info">
+        <h3>Cookies & Cream</h3>
+        <p>Cookies & Cream flavored dessert.</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
       </div>
     </div>
   </div>
 </div>
+
+<!-- Matcha -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Matcha"
+       data-sizes="16oz,22oz"
+       data-description="Smooth and earthy matcha frappe"
+       data-img="images/dish2.jpg">
+    <div class="menu-row">
+      <img src="images/dish2.jpg" alt="Matcha">
+      <div class="menu-info">
+        <h3>Matcha</h3>
+        <p>Smooth and earthy matcha frappe</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Java Chip -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Java Chip"
+       data-sizes="16oz,22oz"
+       data-description="Coffee frappe with chocolate chips"
+       data-img="images/dish3.jpg">
+    <div class="menu-row">
+      <img src="images/dish3.jpg" alt="Java Chip">
+      <div class="menu-info">
+        <h3>Java Chip</h3>
+        <p>Coffee frappe with chocolate chips</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Strawberry -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Strawberry"
+       data-sizes="16oz,22oz"
+       data-description="Sweet and creamy strawberry blend"
+       data-img="images/dish4.jpg">
+    <div class="menu-row">
+      <img src="images/dish4.jpg" alt="Strawberry">
+      <div class="menu-info">
+        <h3>Strawberry</h3>
+        <p>Sweet and creamy strawberry blend</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cheesecake -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Cheesecake"
+       data-sizes="16oz,22oz"
+       data-description="Rich and creamy cheesecake flavor"
+       data-img="images/dish5.jpg">
+    <div class="menu-row">
+      <img src="images/dish5.jpg" alt="Cheesecake">
+      <div class="menu-info">
+        <h3>Cheesecake</h3>
+        <p>Rich and creamy cheesecake flavor</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:-10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chocolate -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Chocolate"
+       data-sizes="16oz,22oz"
+       data-description="Thick and chocolatey frappe"
+       data-img="images/dish6.jpg">
+    <div class="menu-row">
+      <img src="images/dish6.jpg" alt="Chocolate">
+      <div class="menu-info">
+        <h3>Chocolate</h3>
+        <p>Thick and chocolatey frappe</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Red Velvet -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Red Velvet"
+       data-sizes="16oz,22oz"
+       data-description="Creamy cocoa with red velvet flavor"
+       data-img="images/dish7.jpg">
+    <div class="menu-row">
+      <img src="images/dish7.jpg" alt="Red Velvet">
+      <div class="menu-info">
+        <h3>Red Velvet</h3>
+        <p>Creamy cocoa with red velvet flavor</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
 <div class="menu-category" id="v-pills-2">
-  <div class="row">
-    <!-- Amerikano Caramel -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/a2.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Caramel</h3>
+  <h2 class="category-title">Amerikano</h2>
+  <div class="container-mt-5" style="padding-left: 50px; padding-right: 50px;">
+    <div class="row">
 
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="15"
-              data-name="Amerikano Caramel"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/a2.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Amerikano French Vanilla -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/a3.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>French Vanilla</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="16"
-              data-name="Amerikano French Vanilla"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/a3.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Amerikano Hazelnut -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/a4.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Hazelnut</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="17"
-              data-name="Amerikano Hazelnut"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/a4.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Amerikano Salted Caramel -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/a5.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Salted Caramel</h3>
-
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-
-          <p class="price"><span class="item-price">₱59</span></p>
-
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="18"
-              data-name="Amerikano Salted Caramel"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/a5.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
+      <!-- Caramel -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Amerikano Caramel"
+       data-sizes="16oz,22oz"
+       data-description="Bold coffee with caramel notes"
+       data-img="images/a2.png">
+    <div class="menu-row">
+      <img src="images/a2.png" alt="Caramel">
+      <div class="menu-info">
+        <h3>Caramel</h3>
+        <p>Bold coffee with caramel notes</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
       </div>
     </div>
   </div>
 </div>
+
+<!-- French Vanilla -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Amerikano French Vanilla"
+       data-sizes="16oz,22oz"
+       data-description="Smooth coffee with vanilla flavor"
+       data-img="images/a3.png">
+    <div class="menu-row">
+      <img src="images/a3.png" alt="French Vanilla">
+      <div class="menu-info">
+        <h3>French Vanilla</h3>
+        <p>Smooth coffee with vanilla flavor</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hazelnut -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Amerikano Hazelnut"
+       data-sizes="16oz,22oz"
+       data-description="Strong coffee with nutty taste"
+       data-img="images/a4.png">
+    <div class="menu-row">
+      <img src="images/a4.png" alt="Hazelnut">
+      <div class="menu-info">
+        <h3>Hazelnut</h3>
+        <p>Strong coffee with nutty taste</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Salted Caramel -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Amerikano Salted Caramel"
+       data-sizes="16oz,22oz"
+       data-description="Rich coffee with sweet-salty caramel"
+       data-img="images/a5.png">
+    <div class="menu-row">
+      <img src="images/a5.png" alt="Salted Caramel">
+      <div class="menu-info">
+        <h3>Salted Caramel</h3>
+        <p>Rich coffee with sweet-salty caramel</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
 <div class="menu-category" id="v-pills-3">
-  <div class="row">
-    <!-- Green Apple -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/f1.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Green Apple</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="19"
-              data-name="Green Apple"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/f1.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+  <h2 class="category-title">FruiTea</h2>
+  <div class="container-mt-5" style="padding-left: 50px; padding-right: 50px;">
+    <div class="row">
 
-    <!-- Lychee -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/f2.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Lychee</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="20"
-              data-name="Lychee"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/f2.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lemon -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/f3.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Lemon</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="21"
-              data-name="Lemon"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/f3.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strawberry -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/f4.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Strawberry</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="22"
-              data-name="Strawberry"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/f4.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Blueberry -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/f5.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Blueberry</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="23"
-              data-name="Blueberry"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/f5.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Melon -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/f6.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Melon</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="24"
-              data-name="Melon"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/f6.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
+      <!-- Green Apple -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Green Apple"
+       data-sizes="16oz,22oz"
+       data-description="Crisp and refreshing apple tea"
+       data-img="images/f1.png">
+    <div class="menu-row">
+      <img src="images/f1.png" alt="Green Apple">
+      <div class="menu-info">
+        <h3>Green Apple</h3>
+        <p>Crisp and refreshing apple tea</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
       </div>
     </div>
   </div>
 </div>
+
+<!-- Lychee -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Lychee"
+       data-sizes="16oz,22oz"
+       data-description="Sweet and floral lychee tea"
+       data-img="images/f2.png">
+    <div class="menu-row">
+      <img src="images/f2.png" alt="Lychee">
+      <div class="menu-info">
+        <h3>Lychee</h3>
+        <p>Sweet and floral lychee tea.</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lemon -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Lemon"
+       data-sizes="16oz,22oz"
+       data-description="Zesty and refreshing citrus tea"
+       data-img="images/f3.png">
+    <div class="menu-row">
+      <img src="images/f3.png" alt="Lemon">
+      <div class="menu-info">
+        <h3>Lemon</h3>
+        <p>Zesty and refreshing citrus tea</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Strawberry -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Strawberry"
+       data-sizes="16oz,22oz"
+       data-description="Sweet and fruity berry tea"
+       data-img="images/f4.png">
+    <div class="menu-row">
+      <img src="images/f4.png" alt="Strawberry">
+      <div class="menu-info">
+        <h3>Strawberry</h3>
+        <p>Sweet and fruity berry tea</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Blueberry -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Blueberry"
+       data-sizes="16oz,22oz"
+       data-description="Light tea with berry flavor"
+       data-img="images/f5.png">
+    <div class="menu-row">
+      <img src="images/f5.png" alt="Blueberry">
+      <div class="menu-info">
+        <h3>Blueberry</h3>
+        <p>Light tea with berry flavor</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Melon -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Melon"
+       data-sizes="16oz,22oz"
+       data-description="Refreshing tea with melon sweetness"
+       data-img="images/f6.png">
+    <div class="menu-row">
+      <img src="images/f6.png" alt="Melon">
+      <div class="menu-info">
+        <h3>Melon</h3>
+        <p>Refreshing tea with melon sweetness</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
 <div class="menu-category" id="v-pills-4">
-  <div class="row">
-    <!-- Green Apple -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/s1.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Green Apple</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="25"
-              data-name="Green Apple"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/s1.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+  <h2 class="category-title">Tropical Twist (Slushie)</h2>
+  <div class="container-mt-5" style="padding-left:50px; padding-right:50px;">
+    <div class="row">
 
-    <!-- Lychee -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/s2.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Lychee</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="26"
-              data-name="Lychee"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/s2.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lemon -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/s3.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Lemon</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="27"
-              data-name="Lemon"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/s3.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strawberry -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/s4.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Strawberry</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="28"
-              data-name="Strawberry"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/s4.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Blueberry -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/s5.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Blueberry</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="29"
-              data-name="Blueberry"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/s5.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Melon -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/s6.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Melon</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="30"
-              data-name="Melon"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/s6.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
+      <!-- Green Apple -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Green Apple"
+       data-sizes="16oz,22oz"
+       data-description="Icy apple-flavored refresher"
+       data-img="images/s1.jpg">
+    <div class="menu-row">
+      <img src="images/s1.jpg" alt="Green Apple">
+      <div class="menu-info">
+        <h3>Green Apple</h3>
+        <p>Icy apple-flavored refresher</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Lychee -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Lychee"
+       data-sizes="16oz,22oz"
+       data-description="Sweet frozen lychee drink"
+       data-img="images/s2.jpg">
+    <div class="menu-row">
+      <img src="images/s2.jpg" alt="Lychee">
+      <div class="menu-info">
+        <h3>Lychee</h3>
+        <p>Sweet frozen lychee drink</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lemon -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Lemon"
+       data-sizes="16oz,22oz"
+       data-description="Frozen citrus burst"
+       data-img="images/s3.jpg">
+    <div class="menu-row">
+      <img src="images/s3.jpg" alt="Lemon">
+      <div class="menu-info">
+        <h3>Lemon</h3>
+        <p>Frozen citrus burst</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Strawberry -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Strawberry"
+       data-sizes="16oz,22oz"
+       data-description="Icy and fruity strawberry blend"
+       data-img="images/s4.jpg">
+    <div class="menu-row">
+      <img src="images/s4.jpg" alt="Strawberry">
+      <div class="menu-info">
+        <h3>Strawberry</h3>
+        <p>Icy and fruity strawberry blend</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Blueberry -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Blueberry"
+       data-sizes="16oz,22oz"
+       data-description="Refreshing frozen berry drink"
+       data-img="images/s5.jpg">
+    <div class="menu-row">
+      <img src="images/s5.jpg" alt="Blueberry">
+      <div class="menu-info">
+        <h3>Blueberry</h3>
+        <p>Refreshing frozen berry drink</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Melon -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Melon"
+       data-sizes="16oz,22oz"
+       data-description="Cool and sweet melon slush"
+       data-img="images/s6.jpg">
+    <div class="menu-row">
+      <img src="images/s6.jpg" alt="Melon">
+      <div class="menu-info">
+        <h3>Melon</h3>
+        <p>Cool and sweet melon slush</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
+<!-- v-pills-5: Fruit Frappe -->
 <div class="menu-category" id="v-pills-5">
-  <div class="row">
-    <!-- Green Apple -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/ff1.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Green Apple</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="31"
-              data-name="Green Apple"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/ff1.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+  <h2 class="category-title">Tropical Twist (Fruity Frappe)</h2>
+  <div class="container-mt-5" style="padding-left:50px; padding-right:50px;">
+    <div class="row">
 
-    <!-- Lychee -->
+<!-- Melon -->
     <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/ff2.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Lychee</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="32"
-              data-name="Lychee"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/ff2.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lemon -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/ff3.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Lemon</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="33"
-              data-name="Lemon"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/ff3.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strawberry -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/ff4.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Strawberry</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="34"
-              data-name="Strawberry"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/ff4.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Blueberry -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/ff5.jpg);"></a>
-        <div class="text text-center pt-4">
-          <h3>Blueberry</h3>
-          <div class="form-group">
-            <label class="d-block">Choose Size:</label>
-            <select class="form-control size-select" style="width:auto; margin:0 auto;">
-              <option value="59" data-size="16oz" selected>16oz</option>
-              <option value="69" data-size="22oz">22oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱59</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="35"
-              data-name="Blueberry"
-              data-price="59"
-              data-size="16oz"
-              data-img="images/ff5.jpg"
-            >
-              Add to Cart
-            </button>
-          </p>
+  <div class="menu-card menu-item-img"
+       data-name="Melon"
+       data-sizes="16oz,22oz"
+       data-description="Creamy blended melon drink"
+       data-img="images/ff1.jpg">
+    <div class="menu-row">
+      <img src="images/ff1.jpg" alt="Melon">
+      <div class="menu-info">
+        <h3>Melon</h3>
+        <p>Creamy blended melon drink</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Mango -->
+    <div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Mango"
+       data-sizes="16oz,22oz"
+       data-description="Sweet and tropical mango frappe"
+       data-img="images/ff2.jpg">
+    <div class="menu-row">
+      <img src="images/ff2.jpg" alt="Mango">
+      <div class="menu-info">
+        <h3>Mango</h3>
+        <p>Sweet and tropical mango frappe</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Berries -->
+    <div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Berries"
+       data-sizes="16oz,22oz"
+       data-description="Mixed berry blended drink"
+       data-img="images/ff3.jpg">
+    <div class="menu-row">
+      <img src="images/ff3.jpg" alt="Berries">
+      <div class="menu-info">
+        <h3>Berries</h3>
+        <p>Mixed berry blended drink</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Buko Pandan -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Buko Pandan"
+       data-sizes="16oz,22oz"
+       data-description="Coconut with pandan sweetness"
+       data-img="images/ff4.jpg">
+    <div class="menu-row">
+      <img src="images/ff4.jpg" alt="Buko Pandan">
+      <div class="menu-info">
+        <h3>Buko Pandan</h3>
+        <p>Coconut with pandan sweetness</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Avocado -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Avocado"
+       data-sizes="16oz,22oz"
+       data-description="Smooth espresso with creamy milk"
+       data-img="images/ff5.jpg">
+    <div class="menu-row">
+      <img src="images/ff5.jpg" alt="Avocado">
+      <div class="menu-info">
+        <h3>Avocado</h3>
+        <p>Smooth espresso with creamy milk</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+          <label>Choose Size:</label>
+          <select class="form-control size-select">
+            <option value="59" data-size="16oz" selected>16oz</option>
+            <option value="69" data-size="22oz">22oz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
+            <!-- Coffee Latte -->
 <div class="menu-category" id="v-pills-6">
-  <div class="row">
-    <!-- 1. Amerikano -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c1.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Amerikano</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="41"
-              data-name="Amerikano"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c1.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+  <h2 class="category-title">Coffee Latte</h2>
+  <div class="container-mt-5" style="padding-left:50px; padding-right:50px;">
+    <div class="row">
 
-    <!-- 2. Caramel -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c2.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Caramel</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="42"
-              data-name="Caramel"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c2.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Chocolate -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c3.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Chocolate</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="43"
-              data-name="Chocolate"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c3.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. French Vanilla -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c4.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>French Vanilla</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="44"
-              data-name="French Vanilla"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c4.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5. Hazelnut -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c5.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Hazelnut</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="45"
-              data-name="Hazelnut"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c5.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. Matcha -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c6.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Matcha</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="46"
-              data-name="Matcha"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c6.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 7. Salted Caramel -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c7.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Salted Caramel</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="47"
-              data-name="Salted Caramel"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c7.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 8. Caramel Macchiato -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c8.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Caramel Macchiato</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="48"
-              data-name="Caramel Macchiato"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c8.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 9. Taro Latte -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c9.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Taro Latte</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="49"
-              data-name="Taro Latte"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c9.png">
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 10. Biscoff Latte -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/c10.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Biscoff Latte</h3>
-          <div class="form-group d-flex justify-content-center gap-2">
-            <select class="form-control type-select" style="width: 100px;">
-              <option value="HOT" selected>HOT</option>
-              <option value="ICE">ICE</option>
-            </select>
-            <select class="form-control size-select" style="width: 100px;">
-              <option value="69" data-size="12oz" selected>12oz</option>
-            </select>
-          </div>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="50"
-              data-name="Biscoff Latte"
-              data-price="69"
-              data-size="12oz"
-              data-type="HOT"
-              data-img="images/c10.png">
-              Add to Cart
-            </button>
-          </p>
+ <div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Amerikano Original"
+       data-sizes="16oz,22oz"
+       data-description="Smooth espresso with creamy milk"
+       data-img="images/c1.png">
+    <div class="menu-row">
+      <img src="images/c1.png" alt="Amerikano Original">
+      <div class="menu-info">
+        <h3>Amerikano Original</h3>
+        <p>Smooth espresso with creamy milk</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- 2. Caramel Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Caramel Latte"
+       data-sizes="16oz,22oz"
+       data-description="Sweet coffee with rich caramel flavor"
+       data-img="images/c2.png">
+    <div class="menu-row">
+      <img src="images/c2.png" alt="Caramel Latte">
+      <div class="menu-info">
+        <h3>Caramel Latte</h3>
+        <p>Sweet coffee with rich caramel flavor</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Chocolate Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Chocolate Latte"
+       data-sizes="16oz,22oz"
+       data-description="Creamy coffee blended with chocolate"
+       data-img="images/c3.png">
+    <div class="menu-row">
+      <img src="images/c3.png" alt="Chocolate Latte">
+      <div class="menu-info">
+        <h3>Chocolate Latte</h3>
+        <p>Creamy coffee blended with chocolate</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. French Vanilla Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="French Vanilla Latte"
+       data-sizes="16oz,22oz"
+       data-description="Mild coffee with vanilla sweetness"
+       data-img="images/c4.png">
+    <div class="menu-row">
+      <img src="images/c4.png" alt="French Vanilla Latte">
+      <div class="menu-info">
+        <h3>French Vanilla Latte</h3>
+        <p>Mild coffee with vanilla sweetness</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Hazelnut Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Hazelnut Latte"
+       data-sizes="16oz,22oz"
+       data-description="Nutty and creamy coffee blend"
+       data-img="images/c5.png">
+    <div class="menu-row">
+      <img src="images/c5.png" alt="Hazelnut Latte">
+      <div class="menu-info">
+        <h3>Hazelnut Latte</h3>
+        <p>Nutty and creamy coffee blend</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Matcha Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Matcha Latte"
+       data-sizes="16oz,22oz"
+       data-description="Earthy matcha with creamy milk"
+       data-img="images/c6.png">
+    <div class="menu-row">
+      <img src="images/c6.png" alt="Matcha Latte">
+      <div class="menu-info">
+        <h3>Matcha Latte</h3>
+        <p>Earthy matcha with creamy milk</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. Salted Caramel Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Salted Caramel Latte"
+       data-sizes="16oz,22oz"
+       data-description="Sweet caramel with a hint of salt"
+       data-img="images/c7.png">
+    <div class="menu-row">
+      <img src="images/c7.png" alt="Salted Caramel Latte">
+      <div class="menu-info">
+        <h3>Salted Caramel Latte</h3>
+        <p>Sweet caramel with a hint of salt</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. Caramel Macchiato -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Caramel Macchiato"
+       data-sizes="16oz,22oz"
+       data-description="Espresso layered with caramel and milk"
+       data-img="images/c8.png">
+    <div class="menu-row">
+      <img src="images/c8.png" alt="Caramel Macchiato">
+      <div class="menu-info">
+        <h3>Caramel Macchiato</h3>
+        <p>Espresso layered with caramel and milk</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. Taro Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Taro Latte"
+       data-sizes="16oz,22oz"
+       data-description="Creamy latte with sweet taro flavor"
+       data-img="images/c9.png">
+    <div class="menu-row">
+      <img src="images/c9.png" alt="Taro Latte">
+      <div class="menu-info">
+        <h3>Taro Latte</h3>
+        <p>Creamy latte with sweet taro flavor</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 10. Biscoff Latte -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Biscoff Latte"
+       data-sizes="16oz,22oz"
+       data-description="Coffee with spiced cookie sweetness"
+       data-img="images/c10.png">
+    <div class="menu-row">
+      <img src="images/c10.png" alt="Biscoff Latte">
+      <div class="menu-info">
+        <h3>Biscoff Latte</h3>
+        <p>Coffee with spiced cookie sweetness</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:10px; right:-230px;">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
 <div class="menu-category" id="v-pills-7">
+  <h2 class="category-title">Waffles</h2>
+  <div class="container-mt-5" style="padding-left:50px; padding-right:50px;">
   <div class="row">
-    <!-- Caramel Syrup -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/w1.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Caramel Syrup</h3>
-          <p class="price"><span class="item-price">₱79</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="51"
-              data-name="Caramel Syrup"
-              data-price="79"
-              data-img="images/w1.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Chocolate Syrup -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/w2.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Chocolate Syrup</h3>
-          <p class="price"><span class="item-price">₱79</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="52"
-              data-name="Chocolate Syrup"
-              data-price="79"
-              data-img="images/w2.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strawberry Syrup -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/w3.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Strawberry Syrup</h3>
-          <p class="price"><span class="item-price">₱79</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="53"
-              data-name="Strawberry Syrup"
-              data-price="79"
-              data-img="images/w3.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Plain Waffle -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <a href="#" class="img" style="background-image: url(images/w4.png);"></a>
-        <div class="text text-center pt-4">
-          <h3>Plain Waffle</h3>
-          <p class="price"><span class="item-price">₱69</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="54"
-              data-name="Plain Waffle"
-              data-price="79"
-              data-img="images/w4.png"
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
+   <!-- Caramel Syrup Waffle -->
+ <div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Waffle Caramel Syrup"
+       data-sizes="16oz,24oz"
+       data-description="Sweet waffle topped with rich caramel"
+       data-img="images/w1.png">
+    <div class="menu-row">
+      <img src="images/w1.png" alt="Waffle Caramel Syrup">
+      <div class="menu-info">
+        <h3>Waffle Caramel Syrup</h3>
+        <p>Sweet waffle topped with rich caramel.</p>
+        <br>
+        <br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
       </div>
     </div>
   </div>
 </div>
+
+<!-- Chocolate Waffle -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Waffle Chocolate"
+       data-sizes="16oz,24oz"
+       data-description="Waffle topped with sweet strawberry sauce"
+       data-img="images/w2.png">
+    <div class="menu-row">
+      <img src="images/w2.png" alt="Waffle Chocolate">
+      <div class="menu-info">
+        <h3>Waffle Chocolate</h3>
+        <p>Waffle topped with sweet strawberry sauce.</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Strawberry Waffle -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Waffle Strawberry"
+       data-sizes="16oz,24oz"
+       data-description="Waffle topped with sweet strawberry sauce"
+       data-img="images/w3.png">
+    <div class="menu-row">
+      <img src="images/w3.png" alt="Waffle Strawberry">
+      <div class="menu-info">
+        <h3>Waffle Strawberry</h3>
+        <p>Waffle topped with sweet strawberry sauce.</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Plain Waffle -->
+<div class="col-md-3">
+  <div class="menu-card menu-item-img"
+       data-name="Waffle Plain"
+       data-sizes="16oz,24oz"
+       data-description="Warm, crispy waffle with a buttery taste"
+       data-img="images/w4.png">
+    <div class="menu-row">
+      <img src="images/w4.png" alt="Waffle Plain">
+      <div class="menu-info">
+        <h3>Waffle Plain</h3>
+        <p>Warm, crispy waffle with a buttery taste.</p>
+        <br><br>
+        <img src="images/logo.png" alt="Logo" 
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
+
+<!-- Add-ons -->
 <div class="menu-category" id="v-pills-8">
-  <div class="row">
-    <!-- Espresso Shot -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <div class="text text-center pt-4">
-          <h3>Espresso Shot</h3>
-          <p class="price"><span class="item-price">₱15</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="61"
-              data-name="Espresso Shot"
-              data-price="15"
-              data-img=""
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+  <h2 class="category-title">Add-ons</h2>
 
-    <!-- Sweetener -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <div class="text text-center pt-4">
-          <h3>Sweetener</h3>
-          <p class="price"><span class="item-price">₱15</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="62"
-              data-name="Sweetener"
-              data-price="15"
-              data-img=""
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+  <div class="container-mt-5" style="padding-left:50px; padding-right:50px;">
+    <div class="row">
 
-    <!-- Whipping Cream -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <div class="text text-center pt-4">
-          <h3>Whipping Cream</h3>
-          <p class="price"><span class="item-price">₱25</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="63"
-              data-name="Whipping Cream"
-              data-price="25"
-              data-img=""
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+      <!-- Espresso Shot -->
+      <div class="col-md-3">
+        <div class="menu-card menu-item-img"
+             data-name="Espresso Shot"
+             data-sizes="16oz,24oz"
+             data-description="Single shot of espresso for a strong kick"
+             data-img="images/espresso shot.png">
 
-    <!-- Pearls -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <div class="text text-center pt-4">
-          <h3>Pearls</h3>
-          <p class="price"><span class="item-price">₱20</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="64"
-              data-name="Pearls"
-              data-price="20"
-              data-img=""
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+          <div class="menu-row">
+            <img src="images/espresso shot.png" alt="Espresso Shot">
 
-    <!-- Coco Jelly -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <div class="text text-center pt-4">
-          <h3>Coco Jelly</h3>
-          <p class="price"><span class="item-price">₱20</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="65"
-              data-name="Coco Jelly"
-              data-price="20"
-              data-img=""
-            >
-              Add to Cart
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+            <div class="menu-info">
+              <h3>Espresso Shot</h3>
+              <p>Single shot of espresso for a strong kick</p>
+              <br><br>
+              <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+            </div>
+          </div>
 
-    <!-- Cheese Topper -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <div class="text text-center pt-4">
-          <h3>Cheese Topper</h3>
-          <p class="price"><span class="item-price">₱20</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="66"
-              data-name="Cheese Topper"
-              data-price="20"
-              data-img=""
-            >
-              Add to Cart
-            </button>
-          </p>
         </div>
       </div>
-    </div>
 
-    <!-- Coffee Jelly -->
-    <div class="col-md-3">
-      <div class="menu-entry">
-        <div class="text text-center pt-4">
-          <h3>Coffee Jelly</h3>
-          <p class="price"><span class="item-price">₱20</span></p>
-          <p>
-            <button
-              class="btn btn-primary btn-outline-primary add-to-cart"
-              data-id="67"
-              data-name="Coffee Jelly"
-              data-price="20"
-              data-img=""
-            >
-              Add to Cart
-            </button>
-          </p>
+      <!-- Sweetener -->
+      <div class="col-md-3">
+        <div class="menu-card menu-item-img"
+             data-name="Sweetener"
+             data-sizes="16oz,24oz"
+             data-description="Add a touch of sweetness to your drink"
+             data-img="images/sweetener.png">
+
+          <div class="menu-row">
+            <img src="images/sweetener.png" alt="Sweetener">
+
+            <div class="menu-info">
+              <h3>Sweetener</h3>
+              <p>Add a touch of sweetness to your drink</p>
+              <br><br>
+              <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+            </div>
+          </div>
+
         </div>
       </div>
+
+      <!-- Whipping Cream -->
+      <div class="col-md-3">
+        <div class="menu-card menu-item-img"
+             data-name="Whipping Cream"
+             data-sizes="16oz,24oz"
+             data-description="Smooth and creamy topping for your drink"
+             data-img="images/whipping cream.png">
+
+          <div class="menu-row">
+            <img src="images/whipping cream.png" alt="Whipping Cream">
+
+            <div class="menu-info">
+              <h3>Whipping Cream</h3>
+              <p>Smooth and creamy topping for your drink</p>
+              <br><br>
+              <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Pearls -->
+      <div class="col-md-3">
+        <div class="menu-card menu-item-img"
+             data-name="Pearls"
+             data-sizes="16oz,24oz"
+             data-description="Chewy pearls to enhance your beverage"
+             data-img="images/pearls.png">
+
+          <div class="menu-row">
+            <img src="images/pearls.png" alt="Pearls">
+
+            <div class="menu-info">
+              <h3>Pearls</h3>
+              <p>Chewy pearls to enhance your beverage</p>
+              <br><br>
+              <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Coco Jelly -->
+      <div class="col-md-3">
+        <div class="menu-card menu-item-img"
+             data-name="Coco Jelly"
+             data-sizes="16oz,24oz"
+             data-description="Sweet coconut jelly topping for your drink"
+             data-img="images/coco jelly.png">
+
+          <div class="menu-row">
+            <img src="images/coco jelly.png" alt="Coco Jelly">
+
+            <div class="menu-info">
+              <h3>Coco Jelly</h3>
+              <p>Sweet coconut jelly topping for your drink</p>
+              <br><br>
+              <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:40px; right:-230px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Cheese Topper -->
+      <div class="col-md-3">
+        <div class="menu-card menu-item-img"
+             data-name="Cheese Topper"
+             data-sizes="16oz,24oz"
+             data-description="Add a cheesy touch to your drink"
+             data-img="images/cheese topper.png">
+
+          <div class="menu-row">
+            <img src="images/cheese topper.png" alt="Cheese Topper">
+
+            <div class="menu-info">
+              <h3>Cheese Topper</h3>
+              <p>Add a cheesy touch to your drink</p>
+              <br><br>
+              <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:15px; right:-230px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Coffee Jelly -->
+      <div class="col-md-3">
+        <div class="menu-card menu-item-img"
+             data-name="Coffee Jelly"
+             data-sizes="16oz,24oz"
+             data-description="Coffee-flavored jelly topping"
+             data-img="images/coffee jelly.png">
+
+          <div class="menu-row">
+            <img src="images/coffee jelly.png" alt="Coffee Jelly">
+
+            <div class="menu-info">
+              <h3>Coffee Jelly</h3>
+              <p>Coffee-flavored jelly topping</p>
+              <br><br>
+              <img src="images/logo.png" alt="Logo"
+             style="width:50px; height:50px; position:relative; bottom:15px; right:-230px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
+<br>
+<br>
+<br>
 
 </section>
-
 
    <footer class="ftco-footer ftco-section img">
     	<div class="overlay"></div>
@@ -1827,7 +1473,7 @@
               <h2 class="ftco-heading-2">About Us</h2>
               <p>Welcome to Calle Co. Commonwealth Branch – your cozy spot for milk teas, frappes, and iced coffees. Enjoy fresh drinks, a pet-friendly space, and friendly service perfect for relaxing, studying, or catching up with friends.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <<li class="ftco-animate">
+                <li class="ftco-animate">
   <a href="https://facebook.com" target="https://www.facebook.com/profile.php?id=61576864206622" rel="noopener">
     <span class="icon-facebook"></span>
   </a>
@@ -1891,6 +1537,11 @@
         </div>
       </div>
     </footer>
+
+    <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
     
     <!-- Scripts -->
     <script src="js/jquery.min.js"></script>
@@ -1913,34 +1564,6 @@
     <!-- 🛒 Unified Shop Script -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-
-  /* ----------------------------
-     🔸 CATEGORY DROPDOWN LOGIC
-  ----------------------------- */
-  const dropdownBtn = document.getElementById("menuCategoryDropdown");
-  const dropdownItems = document.querySelectorAll(".dropdown-item");
-  const categories = document.querySelectorAll(".menu-category");
-
-  function showCategory(id) {
-    categories.forEach(cat => {
-      cat.classList.toggle("d-none", cat.id !== id);
-    });
-  }
-
-  dropdownItems.forEach(item => {
-    item.addEventListener("click", function() {
-      const targetId = this.getAttribute("data-target");
-      dropdownBtn.textContent = this.textContent;
-      dropdownItems.forEach(i => i.classList.remove("active"));
-      this.classList.add("active");
-      showCategory(targetId);
-    });
-  });
-
-  // Default category shown
-  showCategory("v-pills-0");
-
-
   /* ----------------------------
      🔸 SIZE SELECTION + PRICE UPDATE
   ----------------------------- */
@@ -2061,96 +1684,488 @@ document.querySelectorAll("#v-pills-6 .menu-entry").forEach((entry) => {
 });
 </script>
 
+
+<!-- Modal -->
+<div class="modal fade" id="itemModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-content p-0" style="border-radius:12px; overflow:hidden; position:relative;">
+
+     <!-- Close Button -->
+<button type="button" class="close-x-btn" id="modal-close-btn">×</button>
+
+      <div class="d-flex flex-row flex-wrap">
+        <!-- Left: Image -->
+        <div class="modal-image-container" style="flex:1; min-width:250px; max-width:400px;">
+          <img id="modal-item-img" class="w-100 h-100" src="" alt="Item" style="object-fit:cover;">
+        </div>
+
+        <!-- Right: Details -->
+        <div class="modal-details-container p-4" style="flex:2; min-width:300px;">
+          <!-- Name -->
+          <h3 id="modal-item-name" style="color:black;"></h3>
+          <!-- Description -->
+          <p id="modal-item-description" style="color:black;"></p>
+
+          <!-- Sizes -->
+          <div class="section-label">Choose Size *</div>
+          <div id="modal-sizes" class="radio-group mb-3"></div>
+
+          <!-- Quantity -->
+          <div class="section-label">Quantity</div>
+          <div class="qty-box mb-3">
+            <button id="qty-minus">−</button>
+            <span id="modal-qty" style="color:black; font-weight:bold;">1</span>
+            <button id="qty-plus">+</button>
+          </div>
+
+          <!-- Special Request -->
+          <div class="section-label">Special Request</div>
+          <textarea id="modal-special-request" placeholder="We'll do our best to accommodate any requests."
+            style="height:120px; width:100%; resize:none; padding:8px;"></textarea>
+
+          <!-- Add to Cart -->
+          <button id="add-to-cart" class="btn btn-dark mt-3 w-100">
+            Add to cart | ₱<span id="modal-item-price"></span>
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+/* X button */
+.close-x-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  line-height: 30px;
+  text-align: center;
+}
+.close-x-btn:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+/* Qty Box */
+.qty-box {
+  display: flex;
+  align-items: center;
+  width: 120px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.qty-box button {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: #eee;
+  font-size: 20px;
+  cursor: pointer;
+}
+.qty-box span {
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+  color: black;
+  font-weight: bold;
+}
+</style>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  // ✅ Only run this script on shop.html
-  if (!window.location.pathname.endsWith("shop.html")) return;
+document.addEventListener("DOMContentLoaded", function() {
 
-  // ✅ Limit the script to the shop section only
-  const shopSection = document.querySelector(".ftco-menu.mb-5.pb-5");
-  if (!shopSection) return;
+  // 🔹 Cart system
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // Select elements only inside the shop section
-  const categoryLinks = shopSection.querySelectorAll(".dropdown-item");
-  const categories = shopSection.querySelectorAll(".menu-category");
-  const defaultGif = shopSection.querySelector("#default-category-gif");
+  function updateCartCount() {
+    const cartCount = document.getElementById("cart-count");
+    if (cartCount) {
+      cartCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+    }
+  }
+  updateCartCount();
 
-  // ✅ Hide all categories at the start
-  categories.forEach(cat => (cat.style.display = "none"));
+  // 🔹 Modal variables
+  const qtyEl = document.getElementById('modal-qty');
+  const priceEl = document.getElementById('modal-item-price');
+  let qty = 1;
+  let currentPrice = 0;
 
-  // ✅ Show GIF initially if it exists
-  if (defaultGif) defaultGif.classList.remove("hidden");
+  const modalEl = document.getElementById('itemModal');
+  const modalInstance = new bootstrap.Modal(modalEl);
 
-  // ✅ Add click event to each dropdown item (inside the shop section only)
-  categoryLinks.forEach(link => {
-    link.addEventListener("click", function (e) {
+  // 🔹 Prices for v-pills-6 items
+  const itemPrices = {
+    "Amerikano Original": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Caramel Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Chocolate Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "French Vanilla Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Hazelnut Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Matcha Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Salted Caramel Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Caramel Macchiato": { HOT: 79, ICE: { "16oz": 69, "22oz": 79 } },
+    "Taro Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Biscoff Latte": { HOT: 59, ICE: { "16oz": 59, "22oz": 69 } }
+
+  };
+
+  // 🔹 Open modal and fill data
+  document.querySelectorAll('.menu-item-img').forEach(img => {
+    img.addEventListener('click', function(e) {
       e.preventDefault();
+      const name = this.dataset.name.trim();
+      const sizes = this.dataset.sizes ? this.dataset.sizes.split(',') : [];
+      const imgSrc = this.dataset.img;
+      const description = this.dataset.description;
 
-      const targetId = this.getAttribute("data-target");
+      // Fill modal
+      document.getElementById('modal-item-name').textContent = name;
+      document.getElementById('modal-item-description').textContent = description;
+      document.getElementById('modal-item-img').src = imgSrc;
 
-      // Hide the default GIF when a category is chosen
-      if (defaultGif) defaultGif.classList.add("hidden");
+      const sizesContainer = document.getElementById('modal-sizes');
+      sizesContainer.innerHTML = '';
 
-      // Hide all categories
-      categories.forEach(cat => (cat.style.display = "none"));
+     // 🔹 Waffle: only 1 radio button, fixed price
+    if(name.toLowerCase().includes("waffle")) {
+      const price = name.toLowerCase().includes("plain") ? 69 : 79;
+      const label = document.createElement('label');
+      label.style.display = 'block';
+      label.style.marginBottom = '8px';
+      label.innerHTML = `<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
+      sizesContainer.appendChild(label);
 
-      // Show only the selected category
-      const targetCategory = shopSection.querySelector(`#${targetId}`);
-      if (targetCategory) targetCategory.style.display = "block";
+      // 🔹 Add-ons: only 1 radio button, fixed price
+} else if (this.closest('#v-pills-8')) {
 
-      // Update active state for dropdown links
-      categoryLinks.forEach(item => item.classList.remove("active"));
-      this.classList.add("active");
+  // Determine price for this add-on
+  let price = 0;
+  if (name === "Espresso Shot" || name === "Sweetener") {
+    price = 15;
+  } else if (name === "Whipping Cream") {
+    price = 25;
+  } else if (
+    name === "Pearls" || 
+    name === "Coco Jelly" || 
+    name === "Cheese Topper" || 
+    name === "Coffee Jelly"
+  ) {
+    price = 20;
+  }
+
+  // Create radio button label
+  const label = document.createElement('label');
+  label.style.display = 'block';
+  label.style.marginBottom = '8px';
+  label.innerHTML = `<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
+  sizesContainer.appendChild(label);
+      
+  } else if(this.closest('#v-pills-1')) {
+        sizes.forEach((size, i) => {
+          let price = size === "16oz" ? 69 : 79; // Set your frappe prices here
+          const label = document.createElement('label');
+          label.style.display = 'block';
+          label.style.marginBottom = '8px';
+          label.innerHTML = `<input type="radio" name="modal-size" value="${price}" ${i === 0 ? "checked" : ""}> ${size} (₱${price})`;
+          sizesContainer.appendChild(label);
+        });
+
+      } else {
+      // 🔹 Existing v-pills-6 items logic
+      const priceKey = Object.keys(itemPrices).find(k => k.toLowerCase() === name.toLowerCase());
+      if(priceKey){
+        const item = itemPrices[priceKey];
+
+        // HOT option
+        const hotLabel = document.createElement('label');
+        hotLabel.style.display = 'block';
+        hotLabel.style.marginBottom = '8px';
+        hotLabel.innerHTML = `<input type="radio" name="modal-size" value="${item.HOT}" checked> HOT (₱${item.HOT})`;
+        sizesContainer.appendChild(hotLabel);
+
+        // ICE options
+        for(const [iceSize, icePrice] of Object.entries(item.ICE)){
+          const iceLabel = document.createElement('label');
+          iceLabel.style.display = 'block';
+          iceLabel.style.marginBottom = '8px';
+          iceLabel.innerHTML = `<input type="radio" name="modal-size" value="${icePrice}"> ICE ${iceSize} (₱${icePrice})`;
+          sizesContainer.appendChild(iceLabel);
+        }
+      } else {
+        // Fallback for other items
+        sizes.forEach(size => {
+          const price = size.includes('16oz') ? 59 : 69;
+          const label = document.createElement('label');
+          label.style.display = 'block';
+          label.style.marginBottom = '8px';
+          label.innerHTML = `<input type="radio" name="modal-size" value="${price}" ${size.includes('16oz')?'checked':''}> ${size} (₱${price})`;
+          sizesContainer.appendChild(label);
+        });
+      }
+    }
+
+      // Reset quantity
+      qty = 1;
+      qtyEl.textContent = qty;
+
+      currentPrice = parseInt(document.querySelector('input[name="modal-size"]:checked').value);
+      priceEl.textContent = currentPrice;
+
+      // Show modal
+      modalInstance.show();
     });
   });
+
+  // 🔹 Quantity buttons
+  document.getElementById('qty-minus').addEventListener('click', ()=> {
+    if(qty>1) qty--;
+    qtyEl.textContent = qty;
+    priceEl.textContent = currentPrice*qty;
+  });
+  document.getElementById('qty-plus').addEventListener('click', ()=> {
+    qty++;
+    qtyEl.textContent = qty;
+    priceEl.textContent = currentPrice*qty;
+  });
+
+  // 🔹 Update price when size changes
+  document.getElementById('modal-sizes').addEventListener('change', function(e){
+    if(e.target.name==='modal-size'){
+      currentPrice = parseInt(e.target.value);
+      priceEl.textContent = currentPrice*qty;
+    }
+  });
+
+  // 🔹 Modal Add to Cart
+  document.getElementById('add-to-cart').addEventListener('click', function(){
+    const name = document.getElementById('modal-item-name').textContent;
+    const size = document.querySelector('input[name="modal-size"]:checked').parentElement.textContent.trim();
+    const img = document.getElementById('modal-item-img').src;
+    const specialRequest = document.getElementById('modal-special-request').value;
+
+    let existing = cart.find(item => item.name===name && item.size===size);
+    if(existing){
+      existing.qty += qty;
+    } else {
+      cart.push({
+        name,
+        size,
+        price: currentPrice,
+        qty,
+        img,
+        specialRequest
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+
+    // Close modal and reset
+    modalInstance.hide();
+    qty = 1;
+    qtyEl.textContent = qty;
+    document.getElementById('modal-special-request').value = '';
+    const firstSize = document.querySelector('#modal-sizes input[name="modal-size"]');
+    if(firstSize){
+      firstSize.checked = true;
+      currentPrice = parseInt(firstSize.value);
+      priceEl.textContent = currentPrice;
+    }
+  });
+
+  // 🔹 Close button
+  document.getElementById('modal-close-btn').addEventListener('click', function(){
+    modalInstance.hide();
+    qty = 1;
+    qtyEl.textContent = qty;
+    document.getElementById('modal-special-request').value = '';
+    const firstSize = document.querySelector('#modal-sizes input[name="modal-size"]');
+    if(firstSize){
+      firstSize.checked = true;
+      currentPrice = parseInt(firstSize.value);
+      priceEl.textContent = currentPrice;
+    }
+  });
+
 });
 </script>
 
-<script src="js/shop-category.js"></script>
+<script>
+  function attachModalListeners(container) {
+  container.querySelectorAll('.menu-item-img').forEach(img => {
+    img.addEventListener('click', function(e) {
+      e.preventDefault();
 
+      const name = this.dataset.name.trim();
+      const sizes = this.dataset.sizes ? this.dataset.sizes.split(',') : [];
+      const imgSrc = this.dataset.img;
+      const description = this.dataset.description;
 
-<style>
-  /* Scoped only to ftco-menu section */
-  .ftco-menu .dropdown-menu {
-    background-color: white;
-    transition: background-color 0.3s ease;
+      // Fill modal (same as your current code)
+      document.getElementById('modal-item-name').textContent = name;
+      document.getElementById('modal-item-description').textContent = description;
+      document.getElementById('modal-item-img').src = imgSrc;
+
+      const sizesContainer = document.getElementById('modal-sizes');
+      sizesContainer.innerHTML = '';
+
+      const priceKey = Object.keys(itemPrices).find(k => k.toLowerCase() === name.toLowerCase());
+      if(priceKey){
+        const item = itemPrices[priceKey];
+        const hotLabel = document.createElement('label');
+        hotLabel.style.display = 'block';
+        hotLabel.style.marginBottom = '8px';
+        hotLabel.innerHTML = `<input type="radio" name="modal-size" value="${item.HOT}" checked> HOT (₱${item.HOT})`;
+        sizesContainer.appendChild(hotLabel);
+
+        for(const [iceSize, icePrice] of Object.entries(item.ICE)){
+          const iceLabel = document.createElement('label');
+          iceLabel.style.display = 'block';
+          iceLabel.style.marginBottom = '8px';
+          iceLabel.innerHTML = `<input type="radio" name="modal-size" value="${icePrice}"> ICE ${iceSize} (₱${icePrice})`;
+          sizesContainer.appendChild(iceLabel);
+        }
+      } else {
+        sizes.forEach(size => {
+          const price = size.includes('16oz') ? 59 : 69;
+          const label = document.createElement('label');
+          label.style.display = 'block';
+          label.style.marginBottom = '8px';
+          label.innerHTML = `<input type="radio" name="modal-size" value="${price}" ${size.includes('16oz')?'checked':''}> ${size} (₱${price})`;
+          sizesContainer.appendChild(label);
+        });
+      }
+
+      qty = 1;
+      qtyEl.textContent = qty;
+      currentPrice = parseInt(document.querySelector('input[name="modal-size"]:checked').value);
+      priceEl.textContent = currentPrice;
+
+      modalInstance.show();
+    });
+  });
+}
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const searchBar = document.getElementById("searchBar");
+  const categoryFilter = document.getElementById("categoryFilter");
+
+  const categories = Array.from(document.querySelectorAll(".menu-category"));
+  const allItems = Array.from(document.querySelectorAll(".menu-item-img"));
+
+  const searchBox = document.getElementById("search-results");
+  const searchRow = document.getElementById("search-results-row");
+
+  function resetView() {
+    searchBox.style.display = "none";
+    searchRow.innerHTML = "";
+
+    categories.forEach(cat => {
+      cat.style.display = "";
+      cat.querySelectorAll(".col-md-3").forEach(col => {
+        col.style.display = "";
+      });
+    });
   }
 
-  /* When dropdown is open */
-  .ftco-menu .dropdown.show .dropdown-menu {
-    background-color: #000; /* black background when open */
+  // Attach modal to a given element
+  function attachModalToItem(img) {
+    img.addEventListener('click', function(e){
+      e.preventDefault();
+
+      // Trigger the click on the original element to reuse modal code
+      const original = allItems.find(item => item.dataset.name === img.dataset.name);
+      if(original){
+        original.click();
+      }
+    });
   }
 
-  /* Dropdown items when open */
-  .ftco-menu .dropdown.show .dropdown-item {
-    color: #c49b63; /* gold text */
+  function groupedSearch() {
+    const text = searchBar.value.toLowerCase().trim();
+
+    if(text === ""){
+      resetView();
+      return;
+    }
+
+    // Hide original categories
+    categories.forEach(cat => cat.style.display = "none");
+
+    searchRow.innerHTML = "";
+    searchBox.style.display = "block";
+
+    allItems.forEach(item => {
+      const name = (item.dataset.name || "").toLowerCase();
+      const desc = (item.dataset.description || "").toLowerCase();
+      const sizes = (item.dataset.sizes || "").toLowerCase();
+
+      if(name.includes(text) || desc.includes(text) || sizes.includes(text)){
+        const col = item.closest(".col-md-3");
+        const clone = col.cloneNode(true);
+        searchRow.appendChild(clone);
+
+        // Attach modal to the cloned item
+        const clonedImg = clone.querySelector('.menu-item-img');
+        attachModalToItem(clonedImg);
+      }
+    });
   }
 
-  /* Hovered item turns transparent */
-  .ftco-menu .dropdown.show .dropdown-item:hover {
-    background-color: transparent;
-    color: #c49b63;
-  }
+  // 🔍 SEARCH
+  searchBar.addEventListener("input", groupedSearch);
 
-  /* Active item */
-  .ftco-menu .dropdown-item.active {
-    background-color: transparent !important;
-    color: #c49b63 !important;
-  }
+  // 📂 CATEGORY FILTER
+  categoryFilter.addEventListener("change", function () {
+    const selected = this.value;
+    searchBar.value = ""; // clear search
+    searchBox.style.display = "block"; // show search area
+    searchRow.innerHTML = "";
 
-  /* Dropdown toggle button */
-  .ftco-menu .dropdown-toggle {
-    background-color: #000 !important;
-    color: #c49b63 !important;
-    border: none;
-  }
+    if(selected === "all") {
+      // Reset everything
+      resetView();
+      return;
+    }
 
-  .ftco-menu .dropdown-toggle:hover {
-    background-color: #c49b63 !important;
-    color: #000 !important;
-  }
-</style>
+    // Hide all original categories
+    categories.forEach(cat => cat.style.display = "none");
 
+    // Show only items of the selected category
+    const targetCategory = document.getElementById(selected);
+    if(targetCategory){
+      const items = targetCategory.querySelectorAll(".menu-item-img");
+      items.forEach(item => {
+        const col = item.closest(".col-md-3");
+        const clone = col.cloneNode(true);
+        searchRow.appendChild(clone);
+
+        // Attach modal to cloned item
+        const clonedImg = clone.querySelector('.menu-item-img');
+        attachModalToItem(clonedImg);
+      });
+    }
+  });
+
+});
+</script>
 
 
 

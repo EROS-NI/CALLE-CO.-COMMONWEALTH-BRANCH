@@ -9274,6 +9274,236 @@ textarea.form-control {
   display: none !important;
 }
 
+.menu-card {
+  display: block;
+  border: 3px solid #ffffff;   /* white border */
+  border-radius: 5px;
+  background: transparent !important;
+  padding: 15px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.menu-card:hover {
+  box-shadow: 0 4px 12px rgba(255,255,255,0.4);
+  transform: translateY(-3px);
+}
+
+.menu-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* IMAGE */
+.menu-row img {
+  width: 120px;          /* keep your width */
+  height: 150px;         /* fixed height so image isn't too tall */
+  object-fit: cover;     /* ensures the image fills the space nicely */
+  border-radius: 6px;
+  transition: transform 0.3s ease; /* smooth zoom effect */
+}
+
+/* Zoom effect on hover */
+.menu-card:hover img {
+  transform: scale(1.05); /* slightly zoom in on hover */
+}
+
+/* TEXT AREA */
+.menu-info {
+  flex: 1;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 120px; /* make sure price goes bottom-right */
+}
+
+/* ITEM NAME */
+.menu-info h3 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: bold;
+  color: #FFFFFF; /* requested color */
+}
+
+/* DESCRIPTION */
+.menu-info p {
+  margin: 4px 0;
+}
+
+/* PRICE (bottom-right) */
+.menu-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  text-align: right;
+  margin-top: auto;  /* pushes price down */
+}
+
+.modal-top-img {
+  width: 100%;
+  height: 350px;            /* You can adjust: 300px / 350px / 400px */
+  object-fit: cover;        /* Makes the image fit nicely */
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.col-md-4 {
+  padding: 20px;
+  margin-bottom: 5px;
+}
+
+.menu-category {
+  position: relative; /* important so the title can be positioned relative to this container */
+}
+
+.menu-category .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  
+  /* Different gaps */
+  column-gap: 125px;  /* horizontal gap between cards */
+  row-gap: 3px;     /* vertical gap between cards */
+  
+  align-items: stretch; /* keeps all cards same height */
+}
+
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border: 3px solid #ffffff;
+  border-radius: 5px;
+  background: transparent !important;
+  overflow: hidden;
+  
+  width: 450px;  /* card width */
+  height: 200px; /* card height */
+  
+  margin-top: 50px; /* moves all cards down from top */
+  
+  transition: 0.3s ease;
+}
+
+.category-title {
+  position: absolute;
+  top: -15px;      /* move it slightly above the container */
+  left: 75px;      /* move it a bit to the right */
+  color: #FFFFFF;
+  padding: 5px 10px;
+  font-size: 40px;
+  font-weight: 700;
+  border-radius: 5px; /* optional: rounded corners */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* optional shadow for depth */
+  z-index: 10;       /* make sure it sits above cards */
+}
+
+#categoryFilter {
+  background-color: #000000;  /* black background */
+  color: #000000;             /* amber text */
+  border: 1px solid #ffc107;  /* optional: amber border */
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  appearance: none;           /* remove default arrow in some browsers */
+  -webkit-appearance: none;   /* for Safari/Chrome */
+  -moz-appearance: none;      /* for Firefox */
+}
+
+#categoryFilter option {
+  background-color: #000000;  /* black background for dropdown items */
+  color: #FFFFFF;             /* amber text for items */
+}
+
+#v-pills-6 .row {
+  display: flex;
+  flex-wrap: wrap;
+
+  /* Move the entire block */
+  margin-left: -65px;   /* move right from left edge */
+  margin-top: 30px;    /* move down from top */
+  /* margin-right: 20px; */ /* optional: move left from right edge */
+
+  /* Gaps between cards */
+  row-gap: 20px;       /* vertical space between rows */
+  column-gap: 137px;    /* horizontal space between columns */
+}
+
+/* Cards */
+#v-pills-6 .menu-card {
+  flex: 0 0 calc(25% - 15px); /* adjust width of cards per row */
+  display: flex;
+  flex-direction: column;
+   width: 450px;   /* <-- change this to any width */
+  height: 200px;  
+}
+
+#v-pills-7 .row {
+  display: flex;
+  flex-wrap: wrap;
+
+  /* Move the entire block */
+  margin-left: -65px;   /* move right from left edge */
+  margin-top: 30px;    /* move down from top */
+  /* margin-right: 20px; */ /* optional: move left from right edge */
+
+  /* Gaps between cards */
+  row-gap: 20px;       /* vertical space between rows */
+  column-gap: 137px;    /* horizontal space between columns */
+}
+
+/* Cards */
+#v-pills-7 .menu-card {
+  flex: 0 0 calc(25% - 15px); /* adjust width of cards per row */
+  display: flex;
+  flex-direction: column;
+   width: 450px;   /* <-- change this to any width */
+  height: 200px;  
+}
+
+#v-pills-8 .row {
+  display: flex;
+  flex-wrap: wrap;
+
+  /* Move the entire block */
+  margin-left: -65px;   /* move right from left edge */
+  margin-top: 30px;    /* move down from top */
+  /* margin-right: 20px; */ /* optional: move left from right edge */
+
+  /* Gaps between cards */
+  row-gap: 20px;       /* vertical space between rows */
+  column-gap: 137px;    /* horizontal space between columns */
+}
+
+/* Cards */
+#v-pills-8 .menu-card {
+  flex: 0 0 calc(25% - 15px); /* adjust width of cards per row */
+  display: flex;
+  flex-direction: column;
+   width: 450px;   /* <-- change this to any width */
+  height: 200px;  
+}
+
+#search-results {
+  margin-top: 30px; /* space between search bar and results */
+}
+/* Search results = 3 per row */
+#search-results-row > .col-md-3 {
+  flex: 0 0 33.3333%;
+  max-width: 33.3333%;
+}
+
+/* FORCE same vertical spacing as normal menu */
+#search-results-row > .col-md-3 > .menu-card {
+  margin-bottom: 15px;
+}
+
+
+
+
+
 
 @-webkit-keyframes loader-rotate {
   100% {

@@ -2061,110 +2061,247 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
-  const searchBar = document.getElementById("searchBar");
-  const categoryFilter = document.getElementById("categoryFilter");
+  // 🔹 Modal setup
+  const modalEl = document.getElementById('itemModal');
+  const modalInstance = new bootstrap.Modal(modalEl);
+  const qtyEl = document.getElementById('modal-qty');
+  const priceEl = document.getElementById('modal-item-price');
+  let qty = 1;
+  let currentPrice = 0;
 
-  const categories = Array.from(document.querySelectorAll(".menu-category"));
-  const allItems = Array.from(document.querySelectorAll(".menu-item-img"));
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const searchBox = document.getElementById("search-results");
-  const searchRow = document.getElementById("search-results-row");
-
-  function resetView() {
-    searchBox.style.display = "none";
-    searchRow.innerHTML = "";
-
-    categories.forEach(cat => {
-      cat.style.display = "";
-      cat.querySelectorAll(".col-md-3").forEach(col => {
-        col.style.display = "";
-      });
-    });
+  function updateCartCount() {
+    const cartCount = document.getElementById("cart-count");
+    if(cartCount) cartCount.textContent = cart.reduce((sum,i)=>sum+i.qty,0);
   }
+  updateCartCount();
 
-  // Attach modal to a given element
-  function attachModalToItem(img) {
-    img.addEventListener('click', function(e){
-      e.preventDefault();
+  const itemPrices = {
+    "Amerikano Original": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Caramel Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Chocolate Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "French Vanilla Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Hazelnut Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Matcha Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Salted Caramel Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Caramel Macchiato": { HOT: 79, ICE: { "16oz": 69, "22oz": 79 } },
+    "Taro Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
+    "Biscoff Latte": { HOT: 59, ICE: { "16oz": 59, "22oz": 69 } }
+  };
 
-      // Trigger the click on the original element to reuse modal code
-      const original = allItems.find(item => item.dataset.name === img.dataset.name);
-      if(original){
-        original.click();
-      }
-    });
-  }
+  // 🔹 Quantity buttons
+  document.getElementById('qty-minus').addEventListener('click', ()=>{
+    if(qty>1) qty--;
+    qtyEl.textContent = qty;
+    priceEl.textContent = currentPrice*qty;
+  });
+  document.getElementById('qty-plus').addEventListener('click', ()=>{
+    qty++;
+    qtyEl.textContent = qty;
+    priceEl.textContent = currentPrice*qty;
+  });
 
-  function groupedSearch() {
-    const text = searchBar.value.toLowerCase().trim();
-
-    if(text === ""){
-      resetView();
-      return;
-    }
-
-    // Hide original categories
-    categories.forEach(cat => cat.style.display = "none");
-
-    searchRow.innerHTML = "";
-    searchBox.style.display = "block";
-
-    allItems.forEach(item => {
-      const name = (item.dataset.name || "").toLowerCase();
-      const desc = (item.dataset.description || "").toLowerCase();
-      const sizes = (item.dataset.sizes || "").toLowerCase();
-
-      if(name.includes(text) || desc.includes(text) || sizes.includes(text)){
-        const col = item.closest(".col-md-3");
-        const clone = col.cloneNode(true);
-        searchRow.appendChild(clone);
-
-        // Attach modal to the cloned item
-        const clonedImg = clone.querySelector('.menu-item-img');
-        attachModalToItem(clonedImg);
-      }
-    });
-  }
-
-  // 🔍 SEARCH
-  searchBar.addEventListener("input", groupedSearch);
-
-  // 📂 CATEGORY FILTER
-  categoryFilter.addEventListener("change", function () {
-    const selected = this.value;
-    searchBar.value = ""; // clear search
-    searchBox.style.display = "block"; // show search area
-    searchRow.innerHTML = "";
-
-    if(selected === "all") {
-      // Reset everything
-      resetView();
-      return;
-    }
-
-    // Hide all original categories
-    categories.forEach(cat => cat.style.display = "none");
-
-    // Show only items of the selected category
-    const targetCategory = document.getElementById(selected);
-    if(targetCategory){
-      const items = targetCategory.querySelectorAll(".menu-item-img");
-      items.forEach(item => {
-        const col = item.closest(".col-md-3");
-        const clone = col.cloneNode(true);
-        searchRow.appendChild(clone);
-
-        // Attach modal to cloned item
-        const clonedImg = clone.querySelector('.menu-item-img');
-        attachModalToItem(clonedImg);
-      });
+  // 🔹 Update price when size changes
+  document.getElementById('modal-sizes').addEventListener('change', function(e){
+    if(e.target.name==='modal-size'){
+      currentPrice = parseInt(e.target.value);
+      priceEl.textContent = currentPrice*qty;
     }
   });
 
+  // 🔹 Close button
+  document.getElementById('modal-close-btn').addEventListener('click', ()=>{
+    modalInstance.hide();
+    qty = 1;
+    qtyEl.textContent = qty;
+    document.getElementById('modal-special-request').value = '';
+  });
+
+  // 🔹 Open modal function (handles waffles, add-ons, frappes, HOT/ICE drinks)
+  function openModal(item){
+    const name = item.dataset.name.trim();
+    const imgSrc = item.dataset.img;
+    const description = item.dataset.description;
+    const sizes = item.dataset.sizes ? item.dataset.sizes.split(',') : [];
+
+    document.getElementById('modal-item-name').textContent = name;
+    document.getElementById('modal-item-description').textContent = description;
+    document.getElementById('modal-item-img').src = imgSrc;
+
+    const sizesContainer = document.getElementById('modal-sizes');
+    sizesContainer.innerHTML = '';
+
+    // 🔹 Waffles
+    if(name.toLowerCase().includes("waffle")){
+      const price = name.toLowerCase().includes("plain") ? 69 : 79;
+      const label = document.createElement('label');
+      label.style.display='block';
+      label.innerHTML=`<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
+      sizesContainer.appendChild(label);
+
+    // 🔹 Add-ons
+    } else if(item.closest('#v-pills-8')){
+      let price = 0;
+      if(["Espresso Shot","Sweetener"].includes(name)) price=15;
+      else if(name==="Whipping Cream") price=25;
+      else if(["Pearls","Coco Jelly","Cheese Topper","Coffee Jelly"].includes(name)) price=20;
+      const label = document.createElement('label');
+      label.style.display='block';
+      label.innerHTML=`<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
+      sizesContainer.appendChild(label);
+
+    // 🔹 Frappe sizes
+    } else if(item.closest('#v-pills-1')){
+      sizes.forEach((size,i)=>{
+        const price = size==="16oz"?69:79;
+        const label = document.createElement('label');
+        label.style.display='block';
+        label.innerHTML=`<input type="radio" name="modal-size" value="${price}" ${i===0?"checked":""}> ${size} (₱${price})`;
+        sizesContainer.appendChild(label);
+      });
+
+    // 🔹 HOT/ICE drinks
+    } else {
+      const priceKey = Object.keys(itemPrices).find(k=>k.toLowerCase()===name.toLowerCase());
+      if(priceKey){
+        const drink = itemPrices[priceKey];
+        const hotLabel = document.createElement('label');
+        hotLabel.style.display='block';
+        hotLabel.innerHTML=`<input type="radio" name="modal-size" value="${drink.HOT}" checked> HOT (₱${drink.HOT})`;
+        sizesContainer.appendChild(hotLabel);
+
+        for(const [iceSize,icePrice] of Object.entries(drink.ICE)){
+          const iceLabel = document.createElement('label');
+          iceLabel.style.display='block';
+          iceLabel.innerHTML=`<input type="radio" name="modal-size" value="${icePrice}"> ICE ${iceSize} (₱${icePrice})`;
+          sizesContainer.appendChild(iceLabel);
+        }
+      } else {
+        sizes.forEach(size=>{
+          const price = size.includes("16oz")?59:69;
+          const label = document.createElement('label');
+          label.style.display='block';
+          label.innerHTML=`<input type="radio" name="modal-size" value="${price}" ${size.includes("16oz")?"checked":""}> ${size} (₱${price})`;
+          sizesContainer.appendChild(label);
+        });
+      }
+    }
+
+    qty=1;
+    qtyEl.textContent = qty;
+    currentPrice = parseInt(document.querySelector('input[name="modal-size"]:checked').value);
+    priceEl.textContent = currentPrice;
+
+    modalInstance.show();
+  }
+
+  // 🔹 Event delegation for all items (original + cloned)
+  document.addEventListener('click', function(e){
+    const target = e.target.closest('.menu-item-img');
+    if(target){
+      e.preventDefault();
+      openModal(target);
+    }
+  });
+
+  // 🔹 Add to cart
+  document.getElementById('add-to-cart').addEventListener('click', ()=>{
+    const name = document.getElementById('modal-item-name').textContent;
+    const size = document.querySelector('input[name="modal-size"]:checked').parentElement.textContent.trim();
+    const img = document.getElementById('modal-item-img').src;
+    const specialRequest = document.getElementById('modal-special-request').value;
+
+    let existing = cart.find(i=>i.name===name && i.size===size);
+    if(existing) existing.qty += qty;
+    else cart.push({name,size,price:currentPrice,qty,img,specialRequest});
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+
+    modalInstance.hide();
+    qty=1;
+    qtyEl.textContent = qty;
+    document.getElementById('modal-special-request').value='';
+    const firstSize = document.querySelector('#modal-sizes input[name="modal-size"]');
+    if(firstSize){
+      firstSize.checked=true;
+      currentPrice=parseInt(firstSize.value);
+      priceEl.textContent=currentPrice;
+    }
+  });
+
+  // 🔹 SEARCH + FILTER
+  const searchBar = document.getElementById("searchBar");
+  const categoryFilter = document.getElementById("categoryFilter");
+  const categories = Array.from(document.querySelectorAll(".menu-category"));
+  const allItems = Array.from(document.querySelectorAll(".menu-item-img"));
+  const searchBox = document.getElementById("search-results");
+  const searchRow = document.getElementById("search-results-row");
+  const searchMessage = document.getElementById('searchMessage') || (() => {
+    const p=document.createElement('p');
+    p.id='searchMessage';
+    p.textContent='Search not found';
+    p.style.display='none';
+    searchBox.appendChild(p);
+    return p;
+  })();
+
+  function resetView(){
+    searchBox.style.display="none";
+    searchRow.innerHTML="";
+    searchMessage.style.display="none";
+    categories.forEach(cat=>cat.style.display="");
+  }
+
+  function handleSearch(){
+    const text = searchBar.value.toLowerCase().trim();
+    categoryFilter.value="all";
+    if(!text){ resetView(); return; }
+    categories.forEach(cat=>cat.style.display="none");
+    searchRow.innerHTML="";
+    searchBox.style.display="block";
+    let found=false;
+    allItems.forEach(item=>{
+      const name = item.dataset.name.toLowerCase();
+      const desc = item.dataset.description.toLowerCase();
+      if(name.includes(text)||desc.includes(text)){
+        const clone = item.closest(".col-md-3").cloneNode(true);
+        searchRow.appendChild(clone);
+        found=true;
+      }
+    });
+    searchMessage.style.display = found?"none":"block";
+  }
+
+  function handleCategory(){
+    const selected = categoryFilter.value;
+    searchBar.value="";
+    if(selected==="all"){ resetView(); return; }
+    categories.forEach(cat=>cat.style.display="none");
+    searchRow.innerHTML="";
+    searchBox.style.display="block";
+    searchMessage.style.display="none";
+    let found=false;
+    allItems.forEach(item=>{
+      const parent = item.closest(".menu-category");
+      if(parent && parent.id===selected){
+        const clone = item.closest(".col-md-3").cloneNode(true);
+        searchRow.appendChild(clone);
+        found=true;
+      }
+    });
+    if(!found) searchMessage.style.display="block";
+  }
+
+  searchBar.addEventListener("input", handleSearch);
+  categoryFilter.addEventListener("change", handleCategory);
+
 });
 </script>
+
 
 
 

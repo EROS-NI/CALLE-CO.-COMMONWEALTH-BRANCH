@@ -2061,247 +2061,278 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-  // 🔹 Modal setup
-  const modalEl = document.getElementById('itemModal');
-  const modalInstance = new bootstrap.Modal(modalEl);
-  const qtyEl = document.getElementById('modal-qty');
-  const priceEl = document.getElementById('modal-item-price');
-  let qty = 1;
-  let currentPrice = 0;
-
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  function updateCartCount() {
-    const cartCount = document.getElementById("cart-count");
-    if(cartCount) cartCount.textContent = cart.reduce((sum,i)=>sum+i.qty,0);
-  }
-  updateCartCount();
-
-  const itemPrices = {
-    "Amerikano Original": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "Caramel Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "Chocolate Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "French Vanilla Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "Hazelnut Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "Matcha Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "Salted Caramel Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "Caramel Macchiato": { HOT: 79, ICE: { "16oz": 69, "22oz": 79 } },
-    "Taro Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
-    "Biscoff Latte": { HOT: 59, ICE: { "16oz": 59, "22oz": 69 } }
-  };
-
-  // 🔹 Quantity buttons
-  document.getElementById('qty-minus').addEventListener('click', ()=>{
-    if(qty>1) qty--;
-    qtyEl.textContent = qty;
-    priceEl.textContent = currentPrice*qty;
-  });
-  document.getElementById('qty-plus').addEventListener('click', ()=>{
-    qty++;
-    qtyEl.textContent = qty;
-    priceEl.textContent = currentPrice*qty;
-  });
-
-  // 🔹 Update price when size changes
-  document.getElementById('modal-sizes').addEventListener('change', function(e){
-    if(e.target.name==='modal-size'){
-      currentPrice = parseInt(e.target.value);
-      priceEl.textContent = currentPrice*qty;
-    }
-  });
-
-  // 🔹 Close button
-  document.getElementById('modal-close-btn').addEventListener('click', ()=>{
-    modalInstance.hide();
-    qty = 1;
-    qtyEl.textContent = qty;
-    document.getElementById('modal-special-request').value = '';
-  });
-
-  // 🔹 Open modal function (handles waffles, add-ons, frappes, HOT/ICE drinks)
-  function openModal(item){
-    const name = item.dataset.name.trim();
-    const imgSrc = item.dataset.img;
-    const description = item.dataset.description;
-    const sizes = item.dataset.sizes ? item.dataset.sizes.split(',') : [];
-
-    document.getElementById('modal-item-name').textContent = name;
-    document.getElementById('modal-item-description').textContent = description;
-    document.getElementById('modal-item-img').src = imgSrc;
-
-    const sizesContainer = document.getElementById('modal-sizes');
-    sizesContainer.innerHTML = '';
-
-    // 🔹 Waffles
-    if(name.toLowerCase().includes("waffle")){
-      const price = name.toLowerCase().includes("plain") ? 69 : 79;
-      const label = document.createElement('label');
-      label.style.display='block';
-      label.innerHTML=`<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
-      sizesContainer.appendChild(label);
-
-    // 🔹 Add-ons
-    } else if(item.closest('#v-pills-8')){
-      let price = 0;
-      if(["Espresso Shot","Sweetener"].includes(name)) price=15;
-      else if(name==="Whipping Cream") price=25;
-      else if(["Pearls","Coco Jelly","Cheese Topper","Coffee Jelly"].includes(name)) price=20;
-      const label = document.createElement('label');
-      label.style.display='block';
-      label.innerHTML=`<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
-      sizesContainer.appendChild(label);
-
-    // 🔹 Frappe sizes
-    } else if(item.closest('#v-pills-1')){
-      sizes.forEach((size,i)=>{
-        const price = size==="16oz"?69:79;
-        const label = document.createElement('label');
-        label.style.display='block';
-        label.innerHTML=`<input type="radio" name="modal-size" value="${price}" ${i===0?"checked":""}> ${size} (₱${price})`;
-        sizesContainer.appendChild(label);
-      });
-
-    // 🔹 HOT/ICE drinks
-    } else {
-      const priceKey = Object.keys(itemPrices).find(k=>k.toLowerCase()===name.toLowerCase());
-      if(priceKey){
-        const drink = itemPrices[priceKey];
-        const hotLabel = document.createElement('label');
-        hotLabel.style.display='block';
-        hotLabel.innerHTML=`<input type="radio" name="modal-size" value="${drink.HOT}" checked> HOT (₱${drink.HOT})`;
-        sizesContainer.appendChild(hotLabel);
-
-        for(const [iceSize,icePrice] of Object.entries(drink.ICE)){
-          const iceLabel = document.createElement('label');
-          iceLabel.style.display='block';
-          iceLabel.innerHTML=`<input type="radio" name="modal-size" value="${icePrice}"> ICE ${iceSize} (₱${icePrice})`;
-          sizesContainer.appendChild(iceLabel);
-        }
-      } else {
-        sizes.forEach(size=>{
-          const price = size.includes("16oz")?59:69;
-          const label = document.createElement('label');
-          label.style.display='block';
-          label.innerHTML=`<input type="radio" name="modal-size" value="${price}" ${size.includes("16oz")?"checked":""}> ${size} (₱${price})`;
-          sizesContainer.appendChild(label);
-        });
-      }
-    }
-
-    qty=1;
-    qtyEl.textContent = qty;
-    currentPrice = parseInt(document.querySelector('input[name="modal-size"]:checked').value);
-    priceEl.textContent = currentPrice;
-
-    modalInstance.show();
-  }
-
-  // 🔹 Event delegation for all items (original + cloned)
-  document.addEventListener('click', function(e){
-    const target = e.target.closest('.menu-item-img');
-    if(target){
-      e.preventDefault();
-      openModal(target);
-    }
-  });
-
-  // 🔹 Add to cart
-  document.getElementById('add-to-cart').addEventListener('click', ()=>{
-    const name = document.getElementById('modal-item-name').textContent;
-    const size = document.querySelector('input[name="modal-size"]:checked').parentElement.textContent.trim();
-    const img = document.getElementById('modal-item-img').src;
-    const specialRequest = document.getElementById('modal-special-request').value;
-
-    let existing = cart.find(i=>i.name===name && i.size===size);
-    if(existing) existing.qty += qty;
-    else cart.push({name,size,price:currentPrice,qty,img,specialRequest});
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartCount();
-
-    modalInstance.hide();
-    qty=1;
-    qtyEl.textContent = qty;
-    document.getElementById('modal-special-request').value='';
-    const firstSize = document.querySelector('#modal-sizes input[name="modal-size"]');
-    if(firstSize){
-      firstSize.checked=true;
-      currentPrice=parseInt(firstSize.value);
-      priceEl.textContent=currentPrice;
-    }
-  });
-
-  // 🔹 SEARCH + FILTER
   const searchBar = document.getElementById("searchBar");
-  const categoryFilter = document.getElementById("categoryFilter");
-  const categories = Array.from(document.querySelectorAll(".menu-category"));
-  const allItems = Array.from(document.querySelectorAll(".menu-item-img"));
+
   const searchBox = document.getElementById("search-results");
   const searchRow = document.getElementById("search-results-row");
-  const searchMessage = document.getElementById('searchMessage') || (() => {
-    const p=document.createElement('p');
-    p.id='searchMessage';
-    p.textContent='Search not found';
-    p.style.display='none';
-    searchBox.appendChild(p);
-    return p;
-  })();
 
-  function resetView(){
-    searchBox.style.display="none";
-    searchRow.innerHTML="";
-    searchMessage.style.display="none";
-    categories.forEach(cat=>cat.style.display="");
+  const items = document.querySelectorAll(".menu-item-img");
+  const headers = document.querySelectorAll(".category-title");
+
+  // Store original parent rows
+  items.forEach(item => {
+    const col = item.closest(".col-md-3");
+    item.dataset.originalParent = col.parentElement;
+  });
+
+  function showHeaders(show) {
+    headers.forEach(h => {
+      h.style.display = show ? "" : "none";
+    });
   }
 
-  function handleSearch(){
-    const text = searchBar.value.toLowerCase().trim();
-    categoryFilter.value="all";
-    if(!text){ resetView(); return; }
-    categories.forEach(cat=>cat.style.display="none");
-    searchRow.innerHTML="";
-    searchBox.style.display="block";
-    let found=false;
-    allItems.forEach(item=>{
-      const name = item.dataset.name.toLowerCase();
-      const desc = item.dataset.description.toLowerCase();
-      if(name.includes(text)||desc.includes(text)){
-        const clone = item.closest(".col-md-3").cloneNode(true);
-        searchRow.appendChild(clone);
-        found=true;
+  function resetItems() {
+    items.forEach(item => {
+      const col = item.closest(".col-md-3");
+      const originalRow = item.dataset.originalParent;
+
+      if (originalRow && !originalRow.contains(col)) {
+        originalRow.appendChild(col);
+      }
+      col.style.display = "";
+    });
+
+    searchBox.style.display = "none";
+    showHeaders(true);
+  }
+
+  function applySearch() {
+    const searchText = searchBar.value.toLowerCase().trim();
+
+    if (!searchText) {
+      resetItems();
+      return;
+    }
+
+    let hasResults = false;
+    searchRow.innerHTML = "";
+
+    items.forEach(item => {
+      const name = item.dataset.name?.toLowerCase() || "";
+      const col = item.closest(".col-md-3");
+
+      if (name.includes(searchText)) {
+        searchRow.appendChild(col);
+        col.style.display = "";
+        hasResults = true;
+      } else {
+        col.style.display = "none";
       }
     });
-    searchMessage.style.display = found?"none":"block";
+
+    searchBox.style.display = hasResults ? "block" : "none";
+    showHeaders(false);
   }
 
-  function handleCategory(){
-    const selected = categoryFilter.value;
-    searchBar.value="";
-    if(selected==="all"){ resetView(); return; }
-    categories.forEach(cat=>cat.style.display="none");
-    searchRow.innerHTML="";
-    searchBox.style.display="block";
-    searchMessage.style.display="none";
-    let found=false;
-    allItems.forEach(item=>{
-      const parent = item.closest(".menu-category");
-      if(parent && parent.id===selected){
-        const clone = item.closest(".col-md-3").cloneNode(true);
-        searchRow.appendChild(clone);
-        found=true;
-      }
-    });
-    if(!found) searchMessage.style.display="block";
-  }
-
-  searchBar.addEventListener("input", handleSearch);
-  categoryFilter.addEventListener("change", handleCategory);
+  // 🔍 Search triggers this
+  searchBar.addEventListener("input", applySearch);
 
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const searchBar = document.getElementById("searchBar");
+  const searchBox = document.getElementById("search-results");
+  const searchRow = document.getElementById("search-results-row");
+  const headers = document.querySelectorAll(".category-title");
+  const items = document.querySelectorAll(".menu-item-img");
+
+  // Create the "Not Found" message element
+  const notFoundMsg = document.createElement("div");
+  notFoundMsg.textContent = "SEARCH NOT FOUND";
+  notFoundMsg.style.color = "red";
+  notFoundMsg.style.fontSize = "1.2rem";
+  notFoundMsg.style.fontWeight = "bold";
+  notFoundMsg.style.textAlign = "center";
+  notFoundMsg.style.width = "100%";
+  notFoundMsg.style.margin = "1rem 0";
+  notFoundMsg.style.display = "none"; // hidden by default
+  searchBox.appendChild(notFoundMsg);
+
+  // Store original parent rows and original index
+  items.forEach(item => {
+    const col = item.closest(".col-md-3");
+    item.originalParent = col.parentElement;
+    item.originalIndex = Array.from(col.parentElement.children).indexOf(col);
+  });
+
+  function showHeaders(show) {
+    headers.forEach(h => {
+      h.style.display = show ? "" : "none";
+    });
+  }
+
+  function resetItems() {
+    items.forEach(item => {
+      const col = item.closest(".col-md-3");
+      const parent = item.originalParent;
+      const index = item.originalIndex;
+
+      if (col.parentElement !== parent) {
+        if (index >= parent.children.length) {
+          parent.appendChild(col);
+        } else {
+          parent.insertBefore(col, parent.children[index]);
+        }
+      }
+
+      col.style.display = "";
+    });
+
+    searchBox.style.display = "none";
+    notFoundMsg.style.display = "none";
+    showHeaders(true);
+  }
+
+  function applySearch() {
+    const searchText = searchBar.value.toLowerCase().trim();
+
+    if (!searchText) {
+      resetItems();
+      return;
+    }
+
+    let hasResults = false;
+    searchRow.innerHTML = "";
+    searchRow.appendChild(notFoundMsg); // keep notFoundMsg in searchRow
+
+    items.forEach(item => {
+      const name = item.dataset.name?.toLowerCase() || "";
+      const col = item.closest(".col-md-3");
+
+      if (name.includes(searchText)) {
+        searchRow.appendChild(col);
+        col.style.display = "";
+        hasResults = true;
+      } else {
+        col.style.display = "none";
+      }
+    });
+
+    if (hasResults) {
+      notFoundMsg.style.display = "none";
+    } else {
+      notFoundMsg.style.display = "block"; // show message
+    }
+
+    searchBox.style.display = "block";
+    showHeaders(false);
+  }
+
+  searchBar.addEventListener("input", applySearch);
+
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const searchBar = document.getElementById("searchBar");
+  const categoryFilter = document.getElementById("categoryFilter");
+  const searchBox = document.getElementById("search-results");
+  const searchRow = document.getElementById("search-results-row");
+  const headers = document.querySelectorAll(".category-title");
+  const items = document.querySelectorAll(".menu-item-img");
+
+  // Store original parent row for each item
+  items.forEach(item => {
+    const col = item.closest(".col-md-3");
+    item.originalParent = col.parentElement;
+    item.originalIndex = Array.from(col.parentElement.children).indexOf(col);
+  });
+
+  // Show/hide headers
+  function showHeaders(show) {
+    headers.forEach(h => h.style.display = show ? "" : "none");
+  }
+
+  // Restore items to original layout
+  function resetItems() {
+    items.forEach(item => {
+      const col = item.closest(".col-md-3");
+      const parent = item.originalParent;
+      const index = item.originalIndex;
+
+      if (col.parentElement !== parent) {
+        if (index >= parent.children.length) {
+          parent.appendChild(col);
+        } else {
+          parent.insertBefore(col, parent.children[index]);
+        }
+      }
+
+      col.style.display = "";
+    });
+
+    searchBox.style.display = "none";
+    showHeaders(true);
+  }
+
+  // Handle category filter change
+  function handleCategoryFilter() {
+    const selected = categoryFilter.value;
+
+    if (selected === "all") {
+      resetItems();
+      return;
+    }
+
+    searchRow.innerHTML = "";
+    searchBox.style.display = "block";
+    showHeaders(false);
+
+    items.forEach(item => {
+      const col = item.closest(".col-md-3");
+      const parentCategory = item.closest(".menu-category");
+
+      if (parentCategory && parentCategory.id === selected) {
+        searchRow.appendChild(col); // move item to top
+        col.style.display = "";
+      } else {
+        col.style.display = "none";
+      }
+    });
+  }
+
+  // Handle search input
+  function handleSearch() {
+    // Reset category filter to "all" automatically
+    categoryFilter.value = "all";
+
+    const searchText = searchBar.value.toLowerCase().trim();
+
+    if (!searchText) {
+      resetItems();
+      return;
+    }
+
+    searchRow.innerHTML = "";
+    searchBox.style.display = "block";
+    showHeaders(false);
+
+    items.forEach(item => {
+      const col = item.closest(".col-md-3");
+      const name = item.dataset.name?.toLowerCase() || "";
+
+      if (name.includes(searchText)) {
+        searchRow.appendChild(col);
+        col.style.display = "";
+      } else {
+        col.style.display = "none";
+      }
+    });
+  }
+
+  // Event listeners
+  categoryFilter.addEventListener("change", handleCategoryFilter);
+  searchBar.addEventListener("input", handleSearch);
+
+});
+</script>
 
 
 

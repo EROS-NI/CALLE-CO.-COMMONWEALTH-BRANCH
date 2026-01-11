@@ -102,7 +102,7 @@
     					</p>
     					<p class="d-flex">
     						<span>Delivery</span>
-    						<span>₱40.00</span>
+    						<span id="delivery">₱40.00</span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
@@ -286,6 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const subtotalEl = document.getElementById("subtotal");
   const totalEl = document.getElementById("total");
   const cartCount = document.getElementById("cart-count");
+  const deliveryFee = 40; // ₱40 delivery fee
 
   // Function to render cart
   function renderCart() {
@@ -299,7 +300,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const itemTotal = item.price * item.qty;
         subtotal += itemTotal;
 
-        // ✅ Fixed: use backticks for proper template literal
         cartItemsContainer.innerHTML += `
           <tr class="text-center">
             <td class="product-remove">
@@ -323,8 +323,17 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
 
+    // Update subtotal
     subtotalEl.textContent = "₱" + subtotal.toFixed(2);
-    totalEl.textContent = "₱" + subtotal.toFixed(2);
+
+    // Update total including delivery
+    if (cart.length === 0) {
+      totalEl.textContent = "₱0.00";
+    } else {
+      totalEl.textContent = "₱" + (subtotal + deliveryFee).toFixed(2);
+    }
+
+    // Update cart count badge if exists
     if (cartCount) cartCount.textContent = cart.reduce((sum, i) => sum + i.qty, 0);
 
     attachCartEvents();
@@ -361,7 +370,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  renderCart(); // Initial render
+  // Initial render
+  renderCart();
 });
 </script>
 
@@ -419,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // If you already have renderCart() after qty changes or remove, call updateCheckoutButton() there too
 });
 </script>
+
 
 
   </body>

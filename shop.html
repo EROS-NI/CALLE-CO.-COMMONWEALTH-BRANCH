@@ -1469,13 +1469,13 @@
               <p>Welcome to Calle Co. Commonwealth Branch – your cozy spot for milk teas, frappes, and iced coffees. Enjoy fresh drinks, a pet-friendly space, and friendly service perfect for relaxing, studying, or catching up with friends.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                 <li class="ftco-animate">
-  <a href="https://www.facebook.com/profile.php?id=61576864206622" target="https://www.facebook.com/profile.php?id=61576864206622" rel="noopener">
+  <a href="https://facebook.com" target="https://www.facebook.com/profile.php?id=61576864206622" rel="noopener">
     <span class="icon-facebook"></span>
   </a>
 </li>
 
 <li class="ftco-animate">
-  <a href="https://www.instagram.com/calleco.commonwealth/?utm_source=ig_web_button_share_sheet" target="https://www.instagram.com/calleco.commonwealth/?utm_source=ig_web_button_share_sheet" rel="noopener">
+  <a href="https://instagram.com" target="https://www.instagram.com/calleco.commonwealth/" rel="noopener">
     <span class="icon-instagram"></span>
   </a>
 </li>
@@ -1818,8 +1818,17 @@ document.addEventListener("DOMContentLoaded", function() {
     "Caramel Macchiato": { HOT: 79, ICE: { "16oz": 69, "22oz": 79 } },
     "Taro Latte": { HOT: 69, ICE: { "16oz": 59, "22oz": 69 } },
     "Biscoff Latte": { HOT: 59, ICE: { "16oz": 59, "22oz": 69 } }
-
   };
+
+  // 🔹 Tag each item with a type so search/filter doesn't break pricing
+  document.querySelectorAll('.menu-item-img').forEach(img => {
+    const name = img.dataset.name.toLowerCase();
+
+    if(name.includes("waffle")) img.dataset.itemType = "waffle";
+    else if(img.closest('#v-pills-1')) img.dataset.itemType = "frappe";
+    else if(img.closest('#v-pills-8')) img.dataset.itemType = "addon";
+    else img.dataset.itemType = "other";
+  });
 
   // 🔹 Open modal and fill data
   document.querySelectorAll('.menu-item-img').forEach(img => {
@@ -1829,6 +1838,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const sizes = this.dataset.sizes ? this.dataset.sizes.split(',') : [];
       const imgSrc = this.dataset.img;
       const description = this.dataset.description;
+      const type = this.dataset.itemType;
 
       // Fill modal
       document.getElementById('modal-item-name').textContent = name;
@@ -1838,83 +1848,71 @@ document.addEventListener("DOMContentLoaded", function() {
       const sizesContainer = document.getElementById('modal-sizes');
       sizesContainer.innerHTML = '';
 
-     // 🔹 Waffle: only 1 radio button, fixed price
-    if(name.toLowerCase().includes("waffle")) {
-      const price = name.toLowerCase().includes("plain") ? 69 : 79;
-      const label = document.createElement('label');
-      label.style.display = 'block';
-      label.style.marginBottom = '8px';
-      label.innerHTML = `<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
-      sizesContainer.appendChild(label);
+      // 🔹 Pricing logic based on type
+      if(type === "waffle") {
+        const price = name.toLowerCase().includes("plain") ? 69 : 79;
+        const label = document.createElement('label');
+        label.style.display = 'block';
+        label.style.marginBottom = '8px';
+        label.innerHTML = `<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
+        sizesContainer.appendChild(label);
 
-      // 🔹 Add-ons: only 1 radio button, fixed price
-} else if (this.closest('#v-pills-8')) {
+      } else if(type === "addon") {
+        let price = 0;
+        if(name === "Espresso Shot" || name === "Sweetener") price = 15;
+        else if(name === "Whipping Cream") price = 25;
+        else price = 20;
 
-  // Determine price for this add-on
-  let price = 0;
-  if (name === "Espresso Shot" || name === "Sweetener") {
-    price = 15;
-  } else if (name === "Whipping Cream") {
-    price = 25;
-  } else if (
-    name === "Pearls" || 
-    name === "Coco Jelly" || 
-    name === "Cheese Topper" || 
-    name === "Coffee Jelly"
-  ) {
-    price = 20;
-  }
+        const label = document.createElement('label');
+        label.style.display = 'block';
+        label.style.marginBottom = '8px';
+        label.innerHTML = `<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
+        sizesContainer.appendChild(label);
 
-  // Create radio button label
-  const label = document.createElement('label');
-  label.style.display = 'block';
-  label.style.marginBottom = '8px';
-  label.innerHTML = `<input type="radio" name="modal-size" value="${price}" checked> ₱${price}`;
-  sizesContainer.appendChild(label);
-      
-  } else if(this.closest('#v-pills-1')) {
-        sizes.forEach((size, i) => {
-          let price = size === "16oz" ? 69 : 79; // Set your frappe prices here
-          const label = document.createElement('label');
-          label.style.display = 'block';
-          label.style.marginBottom = '8px';
-          label.innerHTML = `<input type="radio" name="modal-size" value="${price}" ${i === 0 ? "checked" : ""}> ${size} (₱${price})`;
-          sizesContainer.appendChild(label);
+      } else if(type === "frappe") {
+        const priceMap = { "16oz": 69, "22oz": 79 };
+        sizes.forEach((size,i)=>{
+            const price = priceMap[size];
+            const label = document.createElement('label');
+            label.style.display='block';
+            label.style.marginBottom='8px';
+            label.innerHTML = `<input type="radio" name="modal-size" value="${price}" ${i===0?'checked':''}> ${size} (₱${price})`;
+            sizesContainer.appendChild(label);
         });
 
       } else {
-      // 🔹 Existing v-pills-6 items logic
-      const priceKey = Object.keys(itemPrices).find(k => k.toLowerCase() === name.toLowerCase());
-      if(priceKey){
-        const item = itemPrices[priceKey];
+        // v-pills-6 / other items
+        const priceKey = Object.keys(itemPrices).find(k => k.toLowerCase() === name.toLowerCase());
+        if(priceKey){
+          const item = itemPrices[priceKey];
 
-        // HOT option
-        const hotLabel = document.createElement('label');
-        hotLabel.style.display = 'block';
-        hotLabel.style.marginBottom = '8px';
-        hotLabel.innerHTML = `<input type="radio" name="modal-size" value="${item.HOT}" checked> HOT (₱${item.HOT})`;
-        sizesContainer.appendChild(hotLabel);
+          // HOT
+          const hotLabel = document.createElement('label');
+          hotLabel.style.display='block';
+          hotLabel.style.marginBottom='8px';
+          hotLabel.innerHTML = `<input type="radio" name="modal-size" value="${item.HOT}" checked> HOT (₱${item.HOT})`;
+          sizesContainer.appendChild(hotLabel);
 
-        // ICE options
-        for(const [iceSize, icePrice] of Object.entries(item.ICE)){
-          const iceLabel = document.createElement('label');
-          iceLabel.style.display = 'block';
-          iceLabel.style.marginBottom = '8px';
-          iceLabel.innerHTML = `<input type="radio" name="modal-size" value="${icePrice}"> ICE ${iceSize} (₱${icePrice})`;
-          sizesContainer.appendChild(iceLabel);
+          // ICE
+          for(const [iceSize, icePrice] of Object.entries(item.ICE)){
+            const iceLabel = document.createElement('label');
+            iceLabel.style.display='block';
+            iceLabel.style.marginBottom='8px';
+            iceLabel.innerHTML = `<input type="radio" name="modal-size" value="${icePrice}"> ICE ${iceSize} (₱${icePrice})`;
+            sizesContainer.appendChild(iceLabel);
+          }
+        } else {
+          // Fallback
+          sizes.forEach(size => {
+            const price = size.includes('16oz') ? 59 : 69;
+            const label = document.createElement('label');
+            label.style.display='block';
+            label.style.marginBottom='8px';
+            label.innerHTML = `<input type="radio" name="modal-size" value="${price}" ${size.includes('16oz')?'checked':''}> ${size} (₱${price})`;
+            sizesContainer.appendChild(label);
+          });
         }
-      } else {
-        // Fallback for other items
-        sizes.forEach(size => {
-          const price = size.includes('16oz') ? 59 : 69;
-          const label = document.createElement('label');
-          label.style.display = 'block';
-          label.style.marginBottom = '8px';
-          label.innerHTML = `<input type="radio" name="modal-size" value="${price}" ${size.includes('16oz')?'checked':''}> ${size} (₱${price})`;
-          sizesContainer.appendChild(label);
-        });
       }
-    }
 
       // Reset quantity
       qty = 1;
@@ -2001,6 +1999,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script>
+
 
 <script>
   function attachModalListeners(container) {

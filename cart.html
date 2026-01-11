@@ -102,7 +102,7 @@
     					</p>
     					<p class="d-flex">
     						<span>Delivery</span>
-    						<span id="delivery">₱40.00</span>
+    						<span id="delivery">₱30.00</span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const subtotalEl = document.getElementById("subtotal");
   const totalEl = document.getElementById("total");
   const cartCount = document.getElementById("cart-count");
-  const deliveryFee = 40; // ₱40 delivery fee
+  const deliveryFee = 30; // ₱30 delivery fee
 
   // Function to render cart
   function renderCart() {
@@ -406,29 +406,124 @@ button.qty-btn:hover {
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  const cartItemsContainer = document.getElementById("cart-items");
+  const subtotalEl = document.getElementById("subtotal");
+  const totalEl = document.getElementById("total");
+  const deliveryEl = document.getElementById("delivery");
+  const cartCount = document.getElementById("cart-count");
   const checkoutBtn = document.getElementById("checkout-btn");
+  const deliveryFee = 30; // ₱30 delivery fee
+
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  function updateCheckoutButton() {
+  // 🔹 Render cart
+  function renderCart() {
+    cartItemsContainer.innerHTML = "";
+    let subtotal = 0;
+
     if (cart.length === 0) {
-      checkoutBtn.addEventListener("click", function(e) {
-        e.preventDefault();
-        alert("There's no order on your cart");
-      });
+      cartItemsContainer.innerHTML = '<tr><td colspan="6" class="text-center">Your cart is empty.</td></tr>';
+      subtotalEl.textContent = "₱0.00";
+      deliveryEl.textContent = "₱0.00";
+      totalEl.textContent = "₱0.00";
     } else {
-      // Remove previous click handler if cart has items
-      checkoutBtn.addEventListener("click", function() {
-        // normal navigation to checkout page
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+
+        cartItemsContainer.innerHTML += `
+          <tr class="text-center">
+            <td class="product-remove">
+              <a href="#" class="remove-item" data-index="${index}"><span class="icon-close"></span></a>
+            </td>
+            <td class="image-prod">
+              <div class="img" style="background-image:url(${item.img}); width:60px; height:60px; background-size:cover; margin:auto;"></div>
+            </td>
+            <td class="product-name">
+              <h3>${item.name} (${item.size})</h3>
+            </td>
+            <td class="price">₱${item.price.toFixed(2)}</td>
+            <td class="quantity">
+              <button class="qty-btn decrease" data-index="${index}">-</button>
+              <span class="qty-number" data-index="${index}">${item.qty}</span>
+              <button class="qty-btn increase" data-index="${index}">+</button>
+            </td>
+            <td class="total">₱${itemTotal.toFixed(2)}</td>
+          </tr>
+        `;
+      });
+
+      subtotalEl.textContent = "₱" + subtotal.toFixed(2);
+
+      // ✅ Dynamic delivery fee
+      const currentDelivery = subtotal > 0 ? deliveryFee : 0;
+      deliveryEl.textContent = "₱" + currentDelivery.toFixed(2);
+
+      totalEl.textContent = "₱" + (subtotal + currentDelivery).toFixed(2);
+    }
+
+    // Update cart count badge
+    if (cartCount) cartCount.textContent = cart.reduce((sum, i) => sum + i.qty, 0);
+
+    attachCartEvents();
+    updateCheckoutButton();
+  }
+
+  // 🔹 Attach remove and quantity events
+  function attachCartEvents() {
+    // Remove item
+    document.querySelectorAll(".remove-item").forEach(btn => {
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+        const index = this.dataset.index;
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      });
+    });
+
+    // Quantity buttons
+    document.querySelectorAll(".qty-btn").forEach(btn => {
+      btn.addEventListener("click", function() {
+        const index = this.dataset.index;
+        if (this.classList.contains("increase")) {
+          cart[index].qty += 1;
+        } else if (this.classList.contains("decrease")) {
+          cart[index].qty -= 1;
+          if (cart[index].qty <= 0) {
+            cart.splice(index, 1); // Remove if qty is 0
+          }
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      });
+    });
+  }
+
+  // 🔹 Disable checkout if cart empty
+  function updateCheckoutButton() {
+    const newBtn = checkoutBtn.cloneNode(true);
+    checkoutBtn.replaceWith(newBtn);
+
+    if (cart.length === 0) {
+      newBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        alert("There's no order in your cart");
+      });
+      newBtn.classList.add("disabled"); // optional styling
+    } else {
+      newBtn.classList.remove("disabled");
+      newBtn.addEventListener("click", function() {
+        // normal navigation happens
       });
     }
   }
 
-  updateCheckoutButton();
-
-  // Re-run whenever cart changes (optional)
-  // If you already have renderCart() after qty changes or remove, call updateCheckoutButton() there too
+  renderCart(); // initial render
 });
 </script>
+
+
 
 
 

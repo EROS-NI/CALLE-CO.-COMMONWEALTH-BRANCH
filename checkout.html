@@ -169,15 +169,12 @@
           </p>
           <p class="d-flex">
             <span>Delivery</span>
-            <span id="delivery">₱40.00</span>
+            <span id="delivery">₱30.00</span>
           </p>
           <hr>
           <p class="d-flex total-price">
             <span>Total</span>
             <span id="total">₱0.00</span>
-          </p>
-          <p>
-            <a id="place-order" href="#" class="btn btn-primary py-3 px-4 disabled" aria-disabled="true">Proceed to Payment</a>
           </p>
         </div>
 
@@ -210,7 +207,7 @@
           </div>
 
           <p>
-            <a href="shop.html" class="btn btn-primary py-3 px-4">Place an order</a>
+            <a id="place-order" href="#" class="btn btn-primary py-3 px-4 disabled" aria-disabled="true">Place Order</a>
           </p>
         </div>
       </div>
@@ -447,7 +444,7 @@
       });
 
       // delivery (static here; you can compute or read from user choices)
-      const delivery = 0;
+      const delivery = 30;
 
       if (subtotalEl) subtotalEl.textContent = '₱' + subtotal.toFixed(2);
       if (deliveryEl) deliveryEl.textContent = '₱' + delivery.toFixed(2);
@@ -819,6 +816,7 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 </style>
+
 
 
   </body>
